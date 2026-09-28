@@ -9,9 +9,9 @@ import {
   Info, 
   Compass, 
   Phone, 
-  Mail,
-  ExternalLink,
-  ShieldCheck
+  Mail, 
+  ExternalLink, 
+  ShieldCheck 
 } from 'lucide-react';
 
 export const HelpPage: React.FC = () => {
@@ -37,15 +37,15 @@ export const HelpPage: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto pb-12">
+    <div className="space-y-4 sm:space-y-6 max-w-[1600px] mx-auto pb-12">
       {/* Header Banner */}
-      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="text-[10px] font-mono tracking-widest text-ops-cyan uppercase font-bold flex items-center gap-1.5">
-            <BookOpen className="w-3.5 h-3.5" />
-            PUBLIC CYCLONE GUIDE & KNOWLEDGE BASE
+            <BookOpen className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>PUBLIC CYCLONE GUIDE & KNOWLEDGE BASE</span>
           </div>
-          <h1 className="text-xl font-extrabold text-ops-text uppercase tracking-wider font-sans mt-0.5">
+          <h1 className="text-lg sm:text-xl font-extrabold text-ops-text uppercase tracking-wider font-sans mt-0.5 break-words">
             Understanding Cyclones, Maps & Safety Alerts
           </h1>
         </div>
@@ -54,14 +54,14 @@ export const HelpPage: React.FC = () => {
       {/* Guide Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* IMD Classification Matrix */}
-        <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card space-y-3">
+        <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card space-y-3">
           <div className="text-xs font-bold text-ops-text uppercase font-sans flex items-center gap-2 border-b border-ops-border-subtle pb-3">
-            <Compass className="w-4 h-4 text-ops-cyan" />
+            <Compass className="w-4 h-4 text-ops-cyan flex-shrink-0" />
             <span>TROPICAL CYCLONE SCALE CLASSIFICATION</span>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-[11px]">
+            <table className="w-full text-left font-mono text-[11px] min-w-[320px]">
               <thead>
                 <tr className="text-ops-text-muted border-b border-ops-border-subtle">
                   <th className="pb-2 font-normal">CATEGORY</th>
@@ -98,92 +98,91 @@ export const HelpPage: React.FC = () => {
                 <tr>
                   <td className="py-2 font-bold text-red-500">Extremely Severe (ESCS)</td>
                   <td className="py-2">167 – 221 km/h (90–119 kts)</td>
-                  <td className="py-2 text-red-500">Cat 4</td>
+                  <td className="py-2 text-red-500">Cat 4 Equivalent</td>
                 </tr>
                 <tr>
-                  <td className="py-2 font-bold text-red-600">Super Cyclonic Storm (SuCS)</td>
-                  <td className="py-2">222+ km/h (120+ kts)</td>
-                  <td className="py-2 text-red-600">Cat 5</td>
+                  <td className="py-2 font-bold text-purple-600">Super Cyclone (SuCS)</td>
+                  <td className="py-2">≥ 222 km/h (≥ 120 kts)</td>
+                  <td className="py-2 text-purple-600 font-bold">Cat 5 Superstorm</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Satellite Multi-spectral Band Guide */}
-        <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card space-y-3">
+        {/* Community Emergency Protocols */}
+        <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card space-y-4">
           <div className="text-xs font-bold text-ops-text uppercase font-sans flex items-center gap-2 border-b border-ops-border-subtle pb-3">
-            <Layers className="w-4 h-4 text-purple-600" />
-            <span>HOW SATELLITE BANDS WORK</span>
+            <ShieldAlert className="w-4 h-4 text-ops-amber flex-shrink-0" />
+            <span>COMMUNITY SAFETY & EVACUATION PROTOCOLS</span>
           </div>
 
-          <div className="space-y-2.5 text-xs font-sans text-ops-text">
-            <div className="bg-ops-card-sub p-3 rounded-lg border border-ops-border">
-              <div className="font-bold text-ops-cyan font-mono text-[11px]">IR1 CLEAN INFRARED (10.8 µm)</div>
-              <div className="text-[11px] text-ops-text-dim mt-0.5">Measures cloud-top temperatures 24/7. Colder tops indicate tall thunderstorm clouds driving cyclone strength.</div>
+          <div className="space-y-3 text-xs font-sans">
+            <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-ops-text space-y-1">
+              <div className="font-bold text-red-600 uppercase font-mono text-[10px]">
+                PHASE 1: CYCLONE WARNING (24H BEFORE LANDFALL)
+              </div>
+              <p className="text-ops-text-dim text-[11px] leading-relaxed">
+                Move cattle and livestock to high ground. Fishermen must immediately cease all marine operations and anchor vessels safely inland.
+              </p>
             </div>
 
-            <div className="bg-ops-card-sub p-3 rounded-lg border border-ops-border">
-              <div className="font-bold text-purple-600 font-mono text-[11px]">WV WATER VAPOUR (6.7 µm)</div>
-              <div className="text-[11px] text-ops-text-dim mt-0.5">Detects moisture in the upper atmosphere, helping track wind currents that push the cyclone forward.</div>
+            <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-ops-text space-y-1">
+              <div className="font-bold text-ops-amber uppercase font-mono text-[10px]">
+                PHASE 2: LANDFALL ONSET (0H – 12H)
+              </div>
+              <p className="text-ops-text-dim text-[11px] leading-relaxed">
+                Remain indoors away from glass windows. Beware of the "Calm Eye" trap — winds will reverse direction rapidly with greater ferocity once the eye passes.
+              </p>
             </div>
 
-            <div className="bg-ops-card-sub p-3 rounded-lg border border-ops-border">
-              <div className="font-bold text-ops-amber font-mono text-[11px]">ENHANCED BD-CURVE (THERMAL HIGHLIGHT)</div>
-              <div className="text-[11px] text-ops-text-dim mt-0.5">Color-codes cloud temperatures to clearly highlight the eye center and the most intense feeder bands.</div>
+            <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-ops-text space-y-1">
+              <div className="font-bold text-ops-green uppercase font-mono text-[10px]">
+                PHASE 3: POST-LANDFALL RECOVERY
+              </div>
+              <p className="text-ops-text-dim text-[11px] leading-relaxed">
+                Do not touch downed power lines or enter standing floodwaters. Drink boiled or purified water to prevent waterborne infections.
+              </p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Expandable FAQs Section */}
-      <div className="bg-ops-card border border-ops-border rounded-xl p-6 shadow-ops-card space-y-4">
-        <div className="text-xs font-bold text-ops-text uppercase font-sans border-b border-ops-border-subtle pb-3">
-          COMMONLY ASKED QUESTIONS
+      {/* Frequently Asked Questions Accordion */}
+      <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-6 shadow-ops-card space-y-4">
+        <div className="text-xs font-bold text-ops-text uppercase font-sans border-b border-ops-border-subtle pb-3 flex items-center gap-2">
+          <HelpCircle className="w-4 h-4 text-ops-cyan flex-shrink-0" />
+          <span>FREQUENTLY ASKED QUESTIONS & SCIENTIFIC METHODOLOGY</span>
         </div>
 
-        <div className="space-y-2">
-          {faqs.map((faq, idx) => {
-            const isExpanded = expandedFaq === idx;
+        <div className="space-y-2 font-sans text-xs">
+          {faqs.map((faq, index) => {
+            const isExpanded = expandedFaq === index;
             return (
-              <div key={idx} className="border border-ops-border rounded-lg bg-ops-card-sub/60 overflow-hidden">
+              <div 
+                key={index}
+                className="border border-ops-border rounded-lg overflow-hidden transition-colors"
+              >
                 <button
-                  onClick={() => setExpandedFaq(isExpanded ? null : idx)}
-                  className="w-full text-left p-3.5 flex items-center justify-between text-xs font-bold text-ops-text hover:text-ops-cyan transition-colors cursor-pointer"
+                  onClick={() => setExpandedFaq(isExpanded ? null : index)}
+                  className="w-full text-left p-3.5 sm:p-4 bg-ops-card-sub/50 hover:bg-ops-card-sub flex items-center justify-between gap-3 font-semibold text-ops-text transition-colors cursor-pointer"
                 >
-                  <span className="font-sans">{faq.q}</span>
-                  {isExpanded ? <ChevronUp className="w-4 h-4 text-ops-cyan" /> : <ChevronDown className="w-4 h-4 text-ops-text-muted" />}
+                  <span className="text-xs sm:text-sm font-sans">{faq.q}</span>
+                  {isExpanded ? (
+                    <ChevronUp className="w-4 h-4 text-ops-cyan flex-shrink-0" />
+                  ) : (
+                    <ChevronDown className="w-4 h-4 text-ops-text-muted flex-shrink-0" />
+                  )}
                 </button>
+
                 {isExpanded && (
-                  <div className="p-3.5 pt-0 text-xs text-ops-text-dim font-sans leading-relaxed border-t border-ops-border-subtle">
+                  <div className="p-3.5 sm:p-4 bg-ops-card text-ops-text-dim text-xs leading-relaxed border-t border-ops-border">
                     {faq.a}
                   </div>
                 )}
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* Emergency Helpline Contacts */}
-      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card text-xs font-mono">
-        <div className="text-[10px] font-bold tracking-widest text-ops-text-muted uppercase mb-2.5 flex items-center gap-1.5">
-          <Phone className="w-3.5 h-3.5 text-ops-green" />
-          <span>EMERGENCY DISASTER HELPLINES</span>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-ops-text">
-          <div className="bg-ops-card-sub p-3 rounded-lg border border-ops-border">
-            <div className="text-ops-cyan font-bold">National Emergency Helpline</div>
-            <div className="text-[11px] text-ops-text-muted mt-0.5 font-bold">112 (Toll Free)</div>
-          </div>
-          <div className="bg-ops-card-sub p-3 rounded-lg border border-ops-border">
-            <div className="text-ops-amber font-bold">National Disaster Response (NDRF)</div>
-            <div className="text-[11px] text-ops-text-muted mt-0.5 font-bold">1078 / 011-24363260</div>
-          </div>
-          <div className="bg-ops-card-sub p-3 rounded-lg border border-ops-border">
-            <div className="text-ops-green font-bold">Cyclone Warning Division (IMD)</div>
-            <div className="text-[11px] text-ops-text-muted mt-0.5">011-24652484</div>
-          </div>
         </div>
       </div>
     </div>

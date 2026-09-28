@@ -6,12 +6,13 @@ import {
   Satellite, 
   RefreshCw, 
   ChevronDown, 
-  Activity,
-  ShieldCheck,
-  CheckCircle2,
-  Sun,
-  Moon,
-  Compass
+  Activity, 
+  ShieldCheck, 
+  CheckCircle2, 
+  Sun, 
+  Moon, 
+  Compass,
+  Menu
 } from 'lucide-react';
 import { useCyclone } from '../../context/CycloneContext';
 
@@ -19,6 +20,7 @@ export const TopHeader: React.FC = () => {
   const { 
     theme,
     toggleTheme,
+    toggleMobileMenu,
     selectedCyclone, 
     setSelectedCyclone, 
     allActiveCyclones, 
@@ -49,29 +51,38 @@ export const TopHeader: React.FC = () => {
   };
 
   return (
-    <header className="h-14 bg-ops-header border-b border-ops-border px-4 flex items-center justify-between sticky top-0 z-30 select-none shadow-sm transition-colors">
-      {/* Monitoring Region Header & Active Cyclone Selector */}
-      <div className="flex items-center gap-3 md:gap-4 min-w-0">
-        <div>
-          <div className="flex items-center gap-2">
-            <h1 className="text-xs sm:text-sm font-extrabold tracking-wider text-ops-text uppercase font-sans">
-              {selectedCyclone.basin === 'Western Pacific' ? 'WESTERN PACIFIC MONITORING AREA (WPAC)' : 'NORTH INDIAN OCEAN & BAY OF BENGAL'}
+    <header className="h-14 bg-ops-header border-b border-ops-border px-3 sm:px-4 flex items-center justify-between sticky top-0 z-30 select-none shadow-sm transition-colors">
+      {/* Left: Mobile Menu Toggle + Monitoring Region Header & Active Cyclone Selector */}
+      <div className="flex items-center gap-2 sm:gap-3 md:gap-4 min-w-0">
+        {/* Mobile Hamburger Button */}
+        <button
+          onClick={toggleMobileMenu}
+          aria-label="Open Navigation Menu"
+          className="p-1.5 rounded-lg bg-ops-card-sub border border-ops-border text-ops-text hover:text-ops-cyan hover:border-ops-cyan transition-colors lg:hidden flex-shrink-0 cursor-pointer"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
+
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 min-w-0">
+            <h1 className="text-xs sm:text-sm font-extrabold tracking-wider text-ops-text uppercase font-sans truncate">
+              {selectedCyclone.basin === 'Western Pacific' ? 'WESTERN PACIFIC (WPAC)' : 'NORTH INDIAN OCEAN & BAY OF BENGAL'}
             </h1>
           </div>
-          <div className="text-[10px] font-mono tracking-wider text-ops-text-muted flex items-center gap-2 truncate">
-            <span className="text-ops-amber font-semibold">
-              ACTIVE STORM: {selectedCyclone.name} ({selectedCyclone.category})
+          <div className="text-[10px] font-mono tracking-wider text-ops-text-muted flex items-center gap-1.5 sm:gap-2 truncate">
+            <span className="text-ops-amber font-semibold truncate">
+              STORM: {selectedCyclone.name} ({selectedCyclone.category})
             </span>
-            <span className="text-slate-400">·</span>
-            <span>PUBLIC SAFETY FEED</span>
+            <span className="text-slate-400 hidden xs:inline">·</span>
+            <span className="hidden sm:inline">PUBLIC SAFETY FEED</span>
           </div>
         </div>
 
         {/* Quick Storm Switcher Dropdown */}
-        <div className="relative hidden sm:block">
+        <div className="relative hidden md:block flex-shrink-0">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-2.5 py-1 rounded bg-ops-card-sub border border-ops-border text-xs font-mono text-ops-text hover:border-ops-cyan transition-colors"
+            className="flex items-center gap-2 px-2.5 py-1 rounded bg-ops-card-sub border border-ops-border text-xs font-mono text-ops-text hover:border-ops-cyan transition-colors cursor-pointer"
           >
             <span className="w-2 h-2 rounded-full bg-ops-amber animate-pulse" />
             <span className="font-bold text-ops-cyan">{selectedCyclone.name}</span>
@@ -92,7 +103,7 @@ export const TopHeader: React.FC = () => {
                     setIsDropdownOpen(false);
                     addOperationalLog(`Focus switched to ${cyclone.name} (${cyclone.code})`, 'cyan');
                   }}
-                  className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-ops-card-hover transition-colors ${
+                  className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-ops-card-hover transition-colors cursor-pointer ${
                     cyclone.id === selectedCyclone.id ? 'bg-ops-card-sub text-ops-cyan font-bold' : 'text-ops-text'
                   }`}
                 >
@@ -111,22 +122,22 @@ export const TopHeader: React.FC = () => {
       </div>
 
       {/* Right Actions: Compact Light/Dark Switch, Unit Toggle, Clock, Refresh */}
-      <div className="flex items-center gap-2 md:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 flex-shrink-0">
         {/* COMPACT LIGHT / DARK MODE TOGGLE (Light Mode Default) */}
         <button
           onClick={toggleTheme}
           title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-          className="p-1.5 rounded-md bg-ops-card-sub border border-ops-border text-ops-text hover:text-ops-cyan hover:border-ops-cyan transition-all flex items-center gap-1.5 text-xs font-mono font-bold"
+          className="p-1.5 sm:px-2 rounded-md bg-ops-card-sub border border-ops-border text-ops-text hover:text-ops-cyan hover:border-ops-cyan transition-all flex items-center gap-1.5 text-xs font-mono font-bold cursor-pointer"
         >
           {theme === 'light' ? (
             <>
               <Moon className="w-3.5 h-3.5 text-slate-700" />
-              <span className="hidden md:inline text-[11px] text-slate-600">DARK</span>
+              <span className="hidden xl:inline text-[11px] text-slate-600">DARK</span>
             </>
           ) : (
             <>
               <Sun className="w-3.5 h-3.5 text-amber-400" />
-              <span className="hidden md:inline text-[11px] text-amber-300">LIGHT</span>
+              <span className="hidden xl:inline text-[11px] text-amber-300">LIGHT</span>
             </>
           )}
         </button>
@@ -135,16 +146,16 @@ export const TopHeader: React.FC = () => {
         <button
           onClick={toggleWindUnit}
           title="Click to toggle wind speed units (km/h, kts, mph)"
-          className="px-2 py-1 rounded bg-ops-card-sub border border-ops-border text-ops-cyan font-mono text-[11px] font-bold hover:border-ops-cyan transition-colors"
+          className="px-2 py-1 rounded bg-ops-card-sub border border-ops-border text-ops-cyan font-mono text-[10px] sm:text-[11px] font-bold hover:border-ops-cyan transition-colors cursor-pointer"
         >
-          UNIT: {windUnit}
+          <span className="hidden sm:inline">UNIT: </span>{windUnit}
         </button>
 
         {/* Manual Refresh Action */}
         <button
           onClick={handleManualSync}
           title="Refresh Satellite & Telemetry Data"
-          className="p-1.5 rounded bg-ops-card-sub border border-ops-border text-ops-text-muted hover:text-ops-cyan hover:border-ops-cyan transition-all"
+          className="p-1.5 rounded bg-ops-card-sub border border-ops-border text-ops-text-muted hover:text-ops-cyan hover:border-ops-cyan transition-all cursor-pointer"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-ops-cyan' : ''}`} />
         </button>
@@ -153,7 +164,7 @@ export const TopHeader: React.FC = () => {
         <button
           onClick={() => setSoundAlertsEnabled(!soundAlertsEnabled)}
           title={soundAlertsEnabled ? 'Alert Audio Active' : 'Alert Audio Muted'}
-          className="p-1.5 rounded bg-ops-card-sub border border-ops-border text-ops-text-muted hover:text-ops-text transition-colors"
+          className="p-1.5 rounded bg-ops-card-sub border border-ops-border text-ops-text-muted hover:text-ops-text transition-colors cursor-pointer"
         >
           {soundAlertsEnabled ? (
             <Volume2 className="w-3.5 h-3.5 text-ops-cyan" />
@@ -165,11 +176,11 @@ export const TopHeader: React.FC = () => {
         {/* Server / Ingest Status */}
         <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-ops-green text-[10px] font-mono font-bold tracking-wider uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-ops-green animate-pulse" />
-          <span>SATELLITE FEED LIVE</span>
+          <span>SATELLITE LIVE</span>
         </div>
 
         {/* Live Digital Clock */}
-        <div className="px-2.5 py-1 rounded bg-ops-card-sub border border-ops-border text-ops-text font-mono text-xs font-bold tracking-wider">
+        <div className="px-2 py-1 sm:px-2.5 rounded bg-ops-card-sub border border-ops-border text-ops-text font-mono text-[10px] sm:text-xs font-bold tracking-wider">
           {utcTimeString}
         </div>
       </div>

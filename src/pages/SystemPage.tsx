@@ -10,8 +10,8 @@ import {
   CheckCircle2, 
   RefreshCw, 
   Play, 
-  Pause,
-  AlertCircle
+  Pause, 
+  AlertCircle 
 } from 'lucide-react';
 import { SYSTEM_SERVICES } from '../data/mockData';
 import { useCyclone } from '../context/CycloneContext';
@@ -32,23 +32,23 @@ export const SystemPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6 max-w-[1600px] mx-auto pb-8">
+    <div className="space-y-4 sm:space-y-6 max-w-[1600px] mx-auto pb-8">
       {/* Header Banner */}
-      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="text-[10px] font-mono tracking-widest text-ops-cyan uppercase font-bold flex items-center gap-1.5">
-            <Activity className="w-3.5 h-3.5" />
-            PIPELINE STATUS & CLUSTER MONITORING
+            <Activity className="w-3.5 h-3.5 flex-shrink-0" />
+            <span>PIPELINE STATUS & CLUSTER MONITORING</span>
           </div>
-          <h1 className="text-xl font-extrabold text-ops-text uppercase tracking-wider font-sans mt-0.5">
+          <h1 className="text-lg sm:text-xl font-extrabold text-ops-text uppercase tracking-wider font-sans mt-0.5 break-words">
             CycloneOps Cloud Microservice Cluster
           </h1>
         </div>
 
-        <div className="flex items-center gap-3 text-xs font-mono">
-          <div className="bg-emerald-500/10 border border-emerald-500/30 text-ops-green px-3.5 py-2 rounded-lg flex items-center gap-2">
+        <div className="flex items-center gap-3 text-xs font-mono self-start md:self-auto">
+          <div className="bg-emerald-500/10 border border-emerald-500/30 text-ops-green px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-lg flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-ops-green animate-pulse" />
-            <span className="font-bold">ALL SERVICES OPERATIONAL (99.98% UPTIME)</span>
+            <span className="font-bold text-[10px] sm:text-xs">ALL SERVICES OPERATIONAL (99.98% UPTIME)</span>
           </div>
         </div>
       </div>
@@ -69,10 +69,10 @@ export const SystemPage: React.FC = () => {
               }`}
             >
               <div className="flex items-center justify-between gap-2 mb-1.5">
-                <span className="text-[9px] font-mono uppercase text-ops-text-muted">
+                <span className="text-[9px] font-mono uppercase text-ops-text-muted truncate">
                   {node.serviceCategory}
                 </span>
-                <span className="flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-ops-green border border-emerald-500/30 font-bold">
+                <span className="flex items-center gap-1 text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-ops-green border border-emerald-500/30 font-bold flex-shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-ops-green" />
                   {node.status}
                 </span>
@@ -85,7 +85,7 @@ export const SystemPage: React.FC = () => {
                 {node.technology}
               </div>
 
-              <div className="mt-3 pt-2.5 border-t border-ops-border-subtle grid grid-cols-3 gap-1 text-[10px] font-mono text-ops-text-muted">
+              <div className="mt-3 pt-2.5 border-t border-ops-border-subtle grid grid-cols-3 gap-1 text-[10px] font-mono text-ops-text-muted text-center">
                 <div>
                   <div>CPU</div>
                   <div className="text-ops-text font-bold">{node.cpuUsagePct}%</div>
@@ -104,74 +104,51 @@ export const SystemPage: React.FC = () => {
         })}
       </div>
 
-      {/* Node Telemetry & Event Stream Terminal */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card space-y-4">
-          <div className="flex items-center justify-between border-b border-ops-border-subtle pb-3">
-            <span className="text-xs font-bold tracking-wider text-ops-text uppercase font-sans">
-              SERVICE TELEMETRY
-            </span>
-            <span className="text-xs font-mono text-ops-cyan font-bold">
-              {activeServiceNode.name}
-            </span>
-          </div>
-
-          <div className="space-y-2 text-xs font-mono text-ops-text">
-            <div className="flex justify-between border-b border-ops-border-subtle pb-1">
-              <span className="text-ops-text-muted">Category:</span>
-              <strong>{activeServiceNode.serviceCategory}</strong>
-            </div>
-            <div className="flex justify-between border-b border-ops-border-subtle pb-1">
-              <span className="text-ops-text-muted">Technology:</span>
-              <strong>{activeServiceNode.technology}</strong>
-            </div>
-            <div className="flex justify-between border-b border-ops-border-subtle pb-1">
-              <span className="text-ops-text-muted">Uptime:</span>
-              <strong className="text-ops-green">{activeServiceNode.uptimePercentage}%</strong>
-            </div>
-            <div className="flex justify-between border-b border-ops-border-subtle pb-1">
-              <span className="text-ops-text-muted">Response Latency:</span>
-              <strong className="text-ops-cyan">{activeServiceNode.avgLatencyMs} ms</strong>
+      {/* Node Detail Console */}
+      <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-6 shadow-ops-card space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-ops-border-subtle pb-3">
+          <div className="flex items-center gap-3">
+            <Server className="w-5 h-5 text-ops-cyan flex-shrink-0" />
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-ops-text font-sans uppercase truncate">
+                {activeServiceNode.name} — Service Health & Logs
+              </div>
+              <div className="text-[10px] font-mono text-ops-text-muted truncate">
+                Technology: {activeServiceNode.technology} · Node: {activeServiceNode.id}
+              </div>
             </div>
           </div>
 
           <button
             onClick={() => handleRestartService(activeServiceNode.id, activeServiceNode.name)}
             disabled={isRestartingService === activeServiceNode.id}
-            className="w-full py-2 rounded-lg bg-ops-card-sub hover:bg-ops-card text-ops-cyan text-xs font-mono font-bold flex items-center justify-center gap-2 border border-ops-border transition-colors disabled:opacity-50 cursor-pointer"
+            className="w-full sm:w-auto px-3.5 py-1.5 rounded-lg bg-ops-card-sub hover:bg-ops-card text-ops-cyan text-xs font-mono font-bold flex items-center justify-center gap-1.5 border border-ops-border transition-colors cursor-pointer disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isRestartingService === activeServiceNode.id ? 'animate-spin' : ''}`} />
-            <span>{isRestartingService === activeServiceNode.id ? 'CHECKING HEALTH...' : 'PROBE SERVICE HEALTH'}</span>
+            <span>{isRestartingService === activeServiceNode.id ? 'RECHECKING...' : 'RUN HEALTHCHECK'}</span>
           </button>
         </div>
 
-        <div className="lg:col-span-2 bg-slate-900 border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col justify-between">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
-            <div className="flex items-center gap-2">
-              <Terminal className="w-4 h-4 text-ops-green" />
-              <span className="text-xs font-mono font-bold text-slate-200">
-                LIVE STDOUT LOG STREAM · {activeServiceNode.name}
-              </span>
-            </div>
-            <span className="text-[10px] font-mono text-ops-green flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-ops-green animate-ping" />
-              STREAMING
-            </span>
+        {/* Real-time Daemon Log Stream Terminal */}
+        <div className="bg-slate-950 text-slate-200 font-mono text-xs p-4 rounded-xl border border-slate-800 space-y-1.5 overflow-x-auto max-h-56">
+          <div className="text-emerald-400 font-bold text-[11px] mb-2 flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            LIVE TELEMETRY STREAM & CONTAINER HEALTH
           </div>
-
-          <div className="bg-black/90 p-3.5 rounded-lg border border-slate-800 font-mono text-xs text-ops-green space-y-2 h-64 overflow-y-auto leading-relaxed">
-            <div className="text-slate-500 text-[10px]">
-              [INFO] Attached to stream for service '{activeServiceNode.name}'...
-            </div>
-            {activeServiceNode.recentEvents.map((evt, idx) => (
-              <div key={idx} className="flex items-start gap-2">
-                <span className="text-slate-500 text-[10px] select-none">&gt;</span>
-                <span className="text-slate-200 text-[11px]">{evt}</span>
-              </div>
-            ))}
-            <div className="text-ops-cyan text-[10px]">
-              [INFO] Healthcheck probe status 200 OK (Ping: {activeServiceNode.avgLatencyMs}ms)
-            </div>
+          <div className="text-slate-400 text-[11px]">
+            [12:00:01 UTC] [INFO] Service {activeServiceNode.id} active and healthy
+          </div>
+          <div className="text-slate-400 text-[11px]">
+            [12:00:03 UTC] [INFO] Ingest throughput: 28.4 MB/s · Zero dropped packets
+          </div>
+          <div className="text-emerald-400 text-[11px]">
+            [12:00:08 UTC] [HEALTH] Heartbeat ACK received (2ms) — Node healthy
+          </div>
+          <div className="text-slate-400 text-[11px]">
+            [12:00:15 UTC] [INFO] Garbage collection completed · Freed 48.2 MB heap memory
+          </div>
+          <div className="text-cyan-400 text-[11px]">
+            [12:00:22 UTC] [METRICS] CPU: {activeServiceNode.cpuUsagePct}% | Memory: {activeServiceNode.memoryUsagePct}% | Latency: {activeServiceNode.avgLatencyMs}ms
           </div>
         </div>
       </div>

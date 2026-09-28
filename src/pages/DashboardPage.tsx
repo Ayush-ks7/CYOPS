@@ -42,42 +42,42 @@ export const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div className="space-y-5 max-w-[1600px] mx-auto pb-8">
+    <div className="space-y-4 sm:space-y-5 max-w-[1600px] mx-auto pb-8">
       {/* Top Banner: Cyclone Identity & Plain-Language Risk Assessment */}
-      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-colors">
-        <div className="space-y-1.5 min-w-0">
-          <div className="flex flex-wrap items-center gap-2.5">
-            <span className="px-3 py-1 rounded-full bg-amber-500/10 text-ops-amber border border-amber-500/30 font-mono text-xs font-bold uppercase tracking-wider">
+      <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-colors">
+        <div className="space-y-2 min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-full bg-amber-500/10 text-ops-amber border border-amber-500/30 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-wider">
               {selectedCyclone.category}
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-red-500/10 text-ops-red border border-red-500/30 text-xs font-bold">
+            <span className="px-2 sm:px-2.5 py-0.5 rounded-full bg-red-500/10 text-ops-red border border-red-500/30 text-[11px] sm:text-xs font-bold">
               ● LANDFALL {selectedCyclone.landfallEta}
             </span>
-            <span className="text-xs font-mono text-ops-cyan bg-sky-500/10 border border-sky-500/30 px-2.5 py-0.5 rounded-full">
+            <span className="text-[11px] sm:text-xs font-mono text-ops-cyan bg-sky-500/10 border border-sky-500/30 px-2 sm:px-2.5 py-0.5 rounded-full">
               📍 {selectedCyclone.currentPosition.coordinatesFormatted}
             </span>
           </div>
 
-          <h1 className="text-2xl sm:text-3xl font-black text-ops-text tracking-tight font-sans uppercase">
+          <h1 className="text-xl sm:text-2xl md:text-3xl font-black text-ops-text tracking-tight font-sans uppercase break-words">
             {selectedCyclone.name} ({selectedCyclone.code})
           </h1>
 
-          <p className="text-sm text-ops-text-dim font-sans max-w-3xl">
+          <p className="text-xs sm:text-sm text-ops-text-dim font-sans max-w-3xl leading-relaxed">
             Currently moving <strong>{selectedCyclone.movementVector.direction}</strong> towards <strong>{selectedCyclone.landfallLocation}</strong> at {formatWind(selectedCyclone.movementVector.speedKts)}. High coastal storm surge and strong gale-force winds expected.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2.5 flex-shrink-0">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 flex-shrink-0 w-full lg:w-auto">
           <button
             onClick={() => setCurrentPage('live-map')}
-            className="px-4 py-2.5 rounded-lg bg-ops-cyan hover:bg-sky-600 text-white text-xs font-mono font-bold flex items-center gap-2 shadow-md shadow-sky-500/20 transition-all cursor-pointer"
+            className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 rounded-lg bg-ops-cyan hover:bg-sky-600 text-white text-xs font-mono font-bold flex items-center justify-center gap-2 shadow-md shadow-sky-500/20 transition-all cursor-pointer"
           >
             <span>EXPLORE LIVE MAP</span>
             <ArrowUpRight className="w-4 h-4" />
           </button>
           <button
             onClick={() => setCurrentPage('alerts')}
-            className="px-4 py-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-ops-amber text-xs font-mono font-bold flex items-center gap-2 border border-amber-500/30 transition-all cursor-pointer"
+            className="flex-1 sm:flex-initial px-3.5 sm:px-4 py-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-ops-amber text-xs font-mono font-bold flex items-center justify-center gap-2 border border-amber-500/30 transition-all cursor-pointer"
           >
             <span>SAFETY ADVISORIES</span>
             <ArrowUpRight className="w-4 h-4" />
@@ -88,15 +88,15 @@ export const DashboardPage: React.FC = () => {
       {/* User-Centric Public Safety Action Deck */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Card 1: What You Should Do Right Now */}
-        <div className="lg:col-span-2 bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card space-y-4">
-          <div className="flex items-center justify-between border-b border-ops-border-subtle pb-3">
+        <div className="lg:col-span-2 bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-ops-border-subtle pb-3">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-ops-green" />
-              <h2 className="text-sm font-bold text-ops-text uppercase tracking-wider font-sans">
-                COMMUNITY SAFETY CHECKLIST & ACTION STEPS
+              <ShieldCheck className="w-5 h-5 text-ops-green flex-shrink-0" />
+              <h2 className="text-xs sm:text-sm font-bold text-ops-text uppercase tracking-wider font-sans">
+                COMMUNITY SAFETY CHECKLIST & ACTIONS
               </h2>
             </div>
-            <span className="text-[11px] font-mono text-ops-text-muted">
+            <span className="text-[10px] sm:text-[11px] font-mono text-ops-text-muted">
               OFFICIAL DISASTER ADVISORY
             </span>
           </div>
@@ -121,9 +121,9 @@ export const DashboardPage: React.FC = () => {
                   type="checkbox" 
                   checked={!!checkedSafetyItems[item.id]} 
                   onChange={() => {}}
-                  className="mt-0.5 accent-emerald-600 rounded cursor-pointer"
+                  className="mt-0.5 accent-emerald-600 rounded cursor-pointer flex-shrink-0"
                 />
-                <div>
+                <div className="min-w-0">
                   <div className="font-semibold leading-relaxed">{item.text}</div>
                   <span className="text-[10px] font-mono text-ops-text-muted mt-1 inline-block">
                     [{item.tag}]
@@ -133,26 +133,26 @@ export const DashboardPage: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex items-center justify-between pt-1 text-xs text-ops-text-dim">
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs text-ops-text-dim">
             <div className="flex items-center gap-2">
-              <PhoneCall className="w-4 h-4 text-ops-cyan" />
+              <PhoneCall className="w-4 h-4 text-ops-cyan flex-shrink-0" />
               <span>National Disaster Helpline: <strong className="text-ops-text font-mono">1078 / 112</strong></span>
             </div>
-            <span className="text-[11px] font-mono text-ops-green">
+            <span className="text-[11px] font-mono text-ops-green font-bold">
               {Object.values(checkedSafetyItems).filter(Boolean).length}/4 Steps Checked
             </span>
           </div>
         </div>
 
         {/* Card 2: Threat Summary Rating */}
-        <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col justify-between space-y-3">
+        <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card flex flex-col justify-between space-y-4">
           <div>
             <div className="flex items-center justify-between text-[11px] font-mono font-bold text-ops-text-muted uppercase">
               <span>LOCAL THREAT LEVEL</span>
               <AlertTriangle className="w-4 h-4 text-ops-amber" />
             </div>
 
-            <div className="mt-2 text-2xl font-black text-ops-amber font-sans">
+            <div className="mt-2 text-xl sm:text-2xl font-black text-ops-amber font-sans">
               HIGH RISK ZONE
             </div>
             <div className="text-xs text-ops-text-dim mt-1">
@@ -177,7 +177,7 @@ export const DashboardPage: React.FC = () => {
 
           <button
             onClick={() => setCurrentPage('help')}
-            className="w-full py-2 rounded-lg bg-ops-card-sub hover:bg-ops-card border border-ops-border text-ops-cyan text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors"
+            className="w-full py-2.5 rounded-lg bg-ops-card-sub hover:bg-ops-card border border-ops-border text-ops-cyan text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
           >
             <HelpCircle className="w-3.5 h-3.5" />
             <span>HOW TO READ CYCLONE CATEGORIES</span>
@@ -186,7 +186,7 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Primary Key Telemetry Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
         {/* 1. Maximum Wind Speed */}
         <MetricCard
           label="ESTIMATED MAX WIND"
@@ -229,10 +229,10 @@ export const DashboardPage: React.FC = () => {
       </div>
 
       {/* Real-time Community & Meteorological Updates Log */}
-      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card">
-        <div className="flex items-center justify-between pb-3 mb-3 border-b border-ops-border-subtle">
+      <div className="bg-ops-card border border-ops-border rounded-xl p-4 sm:p-5 shadow-ops-card">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-3 mb-3 border-b border-ops-border-subtle">
           <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-ops-cyan" />
+            <Activity className="w-4 h-4 text-ops-cyan flex-shrink-0" />
             <h2 className="text-xs font-bold tracking-wider text-ops-text uppercase font-sans">
               REAL-TIME SATELLITE & COMMUNITY OBSERVATION STREAM
             </h2>
@@ -242,7 +242,7 @@ export const DashboardPage: React.FC = () => {
           </span>
         </div>
 
-        <div className="space-y-2 font-mono text-xs max-h-48 overflow-y-auto">
+        <div className="space-y-2 font-mono text-xs max-h-56 overflow-y-auto">
           {operationalLogs.map((log) => {
             const getDotColor = () => {
               switch (log.severity) {
@@ -261,18 +261,18 @@ export const DashboardPage: React.FC = () => {
             return (
               <div 
                 key={log.id} 
-                className="flex items-start justify-between gap-3 p-2 rounded-lg hover:bg-ops-card-hover transition-colors border-b border-ops-border-subtle"
+                className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 p-2.5 rounded-lg hover:bg-ops-card-hover transition-colors border-b border-ops-border-subtle"
               >
-                <div className="flex items-start gap-3 min-w-0">
+                <div className="flex items-start gap-2.5 min-w-0">
                   <span className="text-ops-text-muted font-semibold flex-shrink-0 text-[11px]">
                     {log.timestamp}
                   </span>
                   <span className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${getDotColor()}`} />
-                  <span className="text-ops-text text-xs leading-relaxed font-sans">
+                  <span className="text-ops-text text-xs leading-relaxed font-sans break-words">
                     {log.message}
                   </span>
                 </div>
-                <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-ops-card-sub text-ops-text-muted border border-ops-border flex-shrink-0">
+                <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-ops-card-sub text-ops-text-muted border border-ops-border self-start sm:self-auto flex-shrink-0">
                   {log.source}
                 </span>
               </div>

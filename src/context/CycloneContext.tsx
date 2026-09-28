@@ -47,6 +47,9 @@ interface CycloneContextType {
   // Navigation & Storm Selection
   currentPage: ActivePage;
   setCurrentPage: (page: ActivePage) => void;
+  isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: (open: boolean) => void;
+  toggleMobileMenu: () => void;
   selectedCyclone: CycloneData;
   setSelectedCyclone: (cyclone: CycloneData) => void;
   allActiveCyclones: CycloneData[];
@@ -134,6 +137,8 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
   }, [theme]);
 
   const [currentPage, setCurrentPage] = useState<ActivePage>('dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(prev => !prev);
   
   // Default to SECONDARY_ACTIVE_CYCLONE ('CYCLONE DANA' in Bay of Bengal near India) as default prototype location
   const [selectedCyclone, setSelectedCyclone] = useState<CycloneData>(SECONDARY_ACTIVE_CYCLONE);
@@ -265,6 +270,9 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
         toggleTheme,
         currentPage,
         setCurrentPage,
+        isMobileMenuOpen,
+        setIsMobileMenuOpen,
+        toggleMobileMenu,
         selectedCyclone,
         setSelectedCyclone,
         allActiveCyclones,

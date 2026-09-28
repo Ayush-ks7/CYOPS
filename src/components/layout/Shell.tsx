@@ -18,7 +18,7 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         {/* Scrollable Viewport with Hidden Scrollbar & Smooth Scroll */}
         <main 
           id="main-scroll-container" 
-          className="flex-1 overflow-y-auto p-4 md:p-6 bg-ops-bg relative transition-colors"
+          className="flex-1 overflow-y-auto p-3 sm:p-4 md:p-6 bg-ops-bg relative transition-colors"
         >
           {children}
         </main>
