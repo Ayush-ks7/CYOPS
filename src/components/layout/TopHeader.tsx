@@ -8,18 +8,25 @@ import {
   ChevronDown, 
   Activity,
   ShieldCheck,
-  CheckCircle2
+  CheckCircle2,
+  Sun,
+  Moon,
+  Compass
 } from 'lucide-react';
 import { useCyclone } from '../../context/CycloneContext';
 
 export const TopHeader: React.FC = () => {
   const { 
+    theme,
+    toggleTheme,
     selectedCyclone, 
     setSelectedCyclone, 
     allActiveCyclones, 
     utcTimeString, 
     soundAlertsEnabled, 
     setSoundAlertsEnabled,
+    windUnit,
+    setWindUnit,
     addOperationalLog
   } = useCyclone();
 
@@ -28,50 +35,54 @@ export const TopHeader: React.FC = () => {
 
   const handleManualSync = () => {
     setIsSyncing(true);
-    addOperationalLog('Manual telemetry synchronization request broadcasted to MOSDAC & IMD radars', 'cyan');
+    addOperationalLog('Manual telemetry synchronization request broadcasted to satellite feeds & coastal radars', 'cyan');
     setTimeout(() => {
       setIsSyncing(false);
-      addOperationalLog('Telemetry data sync verified: 100% frame integrity', 'green');
-    }, 1200);
+      addOperationalLog('Satellite & radar stream verified: 100% feed integrity', 'green');
+    }, 1000);
+  };
+
+  const toggleWindUnit = () => {
+    const nextUnit = windUnit === 'KMH' ? 'KTS' : windUnit === 'KTS' ? 'MPH' : 'KMH';
+    setWindUnit(nextUnit);
+    addOperationalLog(`Wind display unit set to ${nextUnit}`, 'cyan');
   };
 
   return (
-    <header className="h-14 bg-ops-header border-b border-ops-border px-4 flex items-center justify-between sticky top-0 z-20 select-none">
-      {/* Monitoring Region Header */}
-      <div className="flex items-center gap-4 min-w-0">
+    <header className="h-14 bg-ops-header border-b border-ops-border px-4 flex items-center justify-between sticky top-0 z-30 select-none shadow-sm transition-colors">
+      {/* Monitoring Region Header & Active Cyclone Selector */}
+      <div className="flex items-center gap-3 md:gap-4 min-w-0">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-xs sm:text-sm font-extrabold tracking-wider text-slate-100 uppercase font-sans">
-              {selectedCyclone.basin === 'Western Pacific' ? 'WESTERN PACIFIC MONITORING AREA (WPAC)' : 'NORTH INDIAN OCEAN MONITORING DECK (NIO-BOB)'}
+            <h1 className="text-xs sm:text-sm font-extrabold tracking-wider text-ops-text uppercase font-sans">
+              {selectedCyclone.basin === 'Western Pacific' ? 'WESTERN PACIFIC MONITORING AREA (WPAC)' : 'NORTH INDIAN OCEAN & BAY OF BENGAL'}
             </h1>
           </div>
-          <div className="text-[10px] font-mono tracking-wider text-ops-text-dim flex items-center gap-2 truncate">
+          <div className="text-[10px] font-mono tracking-wider text-ops-text-muted flex items-center gap-2 truncate">
             <span className="text-ops-amber font-semibold">
-              STATUS: {selectedCyclone.categoryNumber >= 4 ? '1 ACTIVE SUPER STORM CRITICAL LEVEL' : '1 ACTIVE CYCLONIC THREAT'}
+              ACTIVE STORM: {selectedCyclone.name} ({selectedCyclone.category})
             </span>
-            <span className="text-slate-600">·</span>
-            <span>LIVE TELEMETRY DECK</span>
-            <span className="text-slate-600">·</span>
-            <span className="text-ops-cyan font-mono">INSAT-3DR MOSDAC INGEST</span>
+            <span className="text-slate-400">·</span>
+            <span>PUBLIC SAFETY FEED</span>
           </div>
         </div>
 
-        {/* Quick Storm Switcher */}
-        <div className="relative hidden md:block">
+        {/* Quick Storm Switcher Dropdown */}
+        <div className="relative hidden sm:block">
           <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="flex items-center gap-2 px-2.5 py-1 rounded bg-ops-card border border-ops-border text-xs font-mono text-slate-200 hover:border-ops-cyan/40 transition-colors"
+            className="flex items-center gap-2 px-2.5 py-1 rounded bg-ops-card-sub border border-ops-border text-xs font-mono text-ops-text hover:border-ops-cyan transition-colors"
           >
             <span className="w-2 h-2 rounded-full bg-ops-amber animate-pulse" />
             <span className="font-bold text-ops-cyan">{selectedCyclone.name}</span>
-            <span className="text-[10px] text-slate-400">({selectedCyclone.code})</span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            <span className="text-[10px] text-ops-text-muted">({selectedCyclone.code})</span>
+            <ChevronDown className="w-3.5 h-3.5 text-ops-text-muted" />
           </button>
 
           {isDropdownOpen && (
-            <div className="absolute left-0 mt-1 w-64 bg-ops-card border border-ops-border rounded shadow-xl py-1 z-50">
-              <div className="px-3 py-1 text-[9px] font-mono uppercase tracking-wider text-slate-400 border-b border-ops-border-subtle">
-                Active Tracking Targets
+            <div className="absolute left-0 mt-1 w-72 bg-ops-card border border-ops-border rounded-md shadow-xl py-1 z-50">
+              <div className="px-3 py-1.5 text-[9px] font-mono uppercase tracking-wider text-ops-text-muted border-b border-ops-border-subtle">
+                Active Tropical Cyclones
               </div>
               {allActiveCyclones.map((cyclone) => (
                 <button
@@ -79,17 +90,17 @@ export const TopHeader: React.FC = () => {
                   onClick={() => {
                     setSelectedCyclone(cyclone);
                     setIsDropdownOpen(false);
-                    addOperationalLog(`Active monitoring focus switched to ${cyclone.name} (${cyclone.code})`, 'cyan');
+                    addOperationalLog(`Focus switched to ${cyclone.name} (${cyclone.code})`, 'cyan');
                   }}
-                  className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-slate-800/80 transition-colors ${
-                    cyclone.id === selectedCyclone.id ? 'bg-slate-800 text-ops-cyan font-bold' : 'text-slate-300'
+                  className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between hover:bg-ops-card-hover transition-colors ${
+                    cyclone.id === selectedCyclone.id ? 'bg-ops-card-sub text-ops-cyan font-bold' : 'text-ops-text'
                   }`}
                 >
                   <div>
                     <div className="font-semibold">{cyclone.name}</div>
-                    <div className="text-[10px] font-mono text-slate-400">{cyclone.basin}</div>
+                    <div className="text-[10px] font-mono text-ops-text-muted">{cyclone.basin}</div>
                   </div>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950 text-ops-amber border border-amber-800">
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-ops-amber border border-amber-500/30">
                     {cyclone.category}
                   </span>
                 </button>
@@ -99,13 +110,41 @@ export const TopHeader: React.FC = () => {
         </div>
       </div>
 
-      {/* Right Telemetry Status Pills */}
-      <div className="flex items-center gap-3">
+      {/* Right Actions: Compact Light/Dark Switch, Unit Toggle, Clock, Refresh */}
+      <div className="flex items-center gap-2 md:gap-3">
+        {/* COMPACT LIGHT / DARK MODE TOGGLE (Light Mode Default) */}
+        <button
+          onClick={toggleTheme}
+          title={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+          className="p-1.5 rounded-md bg-ops-card-sub border border-ops-border text-ops-text hover:text-ops-cyan hover:border-ops-cyan transition-all flex items-center gap-1.5 text-xs font-mono font-bold"
+        >
+          {theme === 'light' ? (
+            <>
+              <Moon className="w-3.5 h-3.5 text-slate-700" />
+              <span className="hidden md:inline text-[11px] text-slate-600">DARK</span>
+            </>
+          ) : (
+            <>
+              <Sun className="w-3.5 h-3.5 text-amber-400" />
+              <span className="hidden md:inline text-[11px] text-amber-300">LIGHT</span>
+            </>
+          )}
+        </button>
+
+        {/* Quick Unit Switcher */}
+        <button
+          onClick={toggleWindUnit}
+          title="Click to toggle wind speed units (km/h, kts, mph)"
+          className="px-2 py-1 rounded bg-ops-card-sub border border-ops-border text-ops-cyan font-mono text-[11px] font-bold hover:border-ops-cyan transition-colors"
+        >
+          UNIT: {windUnit}
+        </button>
+
         {/* Manual Refresh Action */}
         <button
           onClick={handleManualSync}
-          title="Force Telemetry Sync"
-          className="p-1.5 rounded bg-ops-card border border-ops-border text-slate-400 hover:text-ops-cyan hover:border-ops-cyan/30 transition-all text-xs"
+          title="Refresh Satellite & Telemetry Data"
+          className="p-1.5 rounded bg-ops-card-sub border border-ops-border text-ops-text-muted hover:text-ops-cyan hover:border-ops-cyan transition-all"
         >
           <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin text-ops-cyan' : ''}`} />
         </button>
@@ -113,24 +152,24 @@ export const TopHeader: React.FC = () => {
         {/* Audio Siren Toggle */}
         <button
           onClick={() => setSoundAlertsEnabled(!soundAlertsEnabled)}
-          title={soundAlertsEnabled ? 'Telemetry Audio Active' : 'Telemetry Audio Muted'}
-          className="p-1.5 rounded bg-ops-card border border-ops-border text-slate-400 hover:text-slate-200 transition-colors text-xs"
+          title={soundAlertsEnabled ? 'Alert Audio Active' : 'Alert Audio Muted'}
+          className="p-1.5 rounded bg-ops-card-sub border border-ops-border text-ops-text-muted hover:text-ops-text transition-colors"
         >
           {soundAlertsEnabled ? (
             <Volume2 className="w-3.5 h-3.5 text-ops-cyan" />
           ) : (
-            <VolumeX className="w-3.5 h-3.5 text-slate-500" />
+            <VolumeX className="w-3.5 h-3.5 text-slate-400" />
           )}
         </button>
 
-        {/* Server Status Pill (Matching @reference.png: ● SERVER ONLINE) */}
-        <div className="flex items-center gap-2 px-2.5 py-1 rounded bg-slate-900/90 border border-emerald-500/30 text-ops-green text-[10px] font-mono font-bold tracking-wider uppercase">
-          <span className="w-2 h-2 rounded-full bg-ops-green animate-pulse" />
-          <span>SERVER ONLINE</span>
+        {/* Server / Ingest Status */}
+        <div className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 rounded bg-emerald-500/10 border border-emerald-500/30 text-ops-green text-[10px] font-mono font-bold tracking-wider uppercase">
+          <span className="w-1.5 h-1.5 rounded-full bg-ops-green animate-pulse" />
+          <span>SATELLITE FEED LIVE</span>
         </div>
 
-        {/* Digital UTC Clock (Matching @reference.png: UTC 14:48:02) */}
-        <div className="px-2.5 py-1 rounded bg-ops-card border border-ops-border text-slate-200 font-mono text-xs font-bold tracking-wider">
+        {/* Live Digital Clock */}
+        <div className="px-2.5 py-1 rounded bg-ops-card-sub border border-ops-border text-ops-text font-mono text-xs font-bold tracking-wider">
           {utcTimeString}
         </div>
       </div>

@@ -34,32 +34,32 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       case 'red':
         return 'text-ops-red';
       default:
-        return 'text-slate-100';
+        return 'text-ops-text';
     }
   };
 
   const getBadgeClasses = () => {
     switch (badgeVariant) {
       case 'orange':
-        return 'bg-amber-950/80 text-ops-amber border-ops-amber/30';
+        return 'bg-amber-500/10 text-ops-amber border-amber-500/30';
       case 'red':
-        return 'bg-red-950/80 text-ops-red border-ops-red/30';
+        return 'bg-red-500/10 text-ops-red border-red-500/30';
       case 'green':
-        return 'bg-emerald-950/80 text-ops-green border-ops-green/30';
+        return 'bg-emerald-500/10 text-ops-green border-emerald-500/30';
       case 'cyan':
       default:
-        return 'bg-cyan-950/80 text-ops-cyan border-ops-cyan/30';
+        return 'bg-sky-500/10 text-ops-cyan border-sky-500/30';
     }
   };
 
   return (
-    <div className={`bg-ops-card border border-ops-border rounded-sm p-4 relative flex flex-col justify-between hover:border-ops-border-light transition-colors ${className}`}>
-      <div className="flex items-center justify-between gap-2 mb-2">
-        <span className="text-[10px] font-bold tracking-wider text-ops-text-muted uppercase">
+    <div className={`bg-ops-card border border-ops-border rounded-lg p-4 relative flex flex-col justify-between hover:border-ops-border-light shadow-ops-card transition-all ${className}`}>
+      <div className="flex items-center justify-between gap-2 mb-1.5">
+        <span className="text-[11px] font-bold tracking-wider text-ops-text-muted uppercase">
           {label}
         </span>
         {badge && (
-          <span className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded-sm border ${getBadgeClasses()}`}>
+          <span className={`text-[10px] font-mono uppercase px-2 py-0.5 rounded border font-bold ${getBadgeClasses()}`}>
             {badge}
           </span>
         )}
@@ -71,7 +71,7 @@ export const MetricCard: React.FC<MetricCardProps> = ({
             {value}
           </span>
           {unit && (
-            <span className="text-xs font-mono font-medium text-ops-text-dim uppercase">
+            <span className="text-xs font-mono font-bold text-ops-text-muted uppercase">
               {unit}
             </span>
           )}
@@ -79,13 +79,13 @@ export const MetricCard: React.FC<MetricCardProps> = ({
       </div>
 
       {subtext && (
-        <div className="text-[11px] text-ops-text-dim mt-1 font-sans leading-tight">
+        <div className="text-[12px] text-ops-text-dim mt-1 font-sans leading-tight">
           {subtext}
         </div>
       )}
 
       {children && (
-        <div className="mt-3 pt-2 border-t border-ops-border-subtle">
+        <div className="mt-3 pt-2.5 border-t border-ops-border-subtle">
           {children}
         </div>
       )}

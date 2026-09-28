@@ -1,31 +1,31 @@
 import React from 'react';
-import { AlertTriangle, ChevronRight, X } from 'lucide-react';
+import { AlertTriangle, ChevronRight } from 'lucide-react';
 import { useCyclone } from '../../context/CycloneContext';
 
 export const AlertMarquee: React.FC = () => {
-  const { selectedCyclone, setCurrentPage, alerts } = useCyclone();
+  const { selectedCyclone, setCurrentPage, alerts, formatWind } = useCyclone();
 
   const activeAlert = alerts.find(a => !a.isAcknowledged) || alerts[0];
 
   if (!activeAlert) return null;
 
   return (
-    <div className="bg-amber-950/40 border-b border-ops-amber/40 px-4 py-1.5 flex items-center justify-between text-xs select-none">
+    <div className="bg-amber-500/10 border-b border-amber-500/30 px-4 py-1.5 flex items-center justify-between text-xs select-none transition-colors">
       <div className="flex items-center gap-2.5 min-w-0 flex-1">
         <span className="w-2 h-2 rounded-full bg-ops-amber animate-ping flex-shrink-0" />
         <span className="text-[11px] font-mono font-bold tracking-wider text-ops-amber uppercase flex-shrink-0">
-          CYCLONE WARNING:
+          SAFETY ADVISORY:
         </span>
-        <span className="text-slate-200 text-xs truncate">
-          {selectedCyclone.category} - {selectedCyclone.name} approaching landfall {selectedCyclone.landfallEta} · Max winds {selectedCyclone.maxSustainedWindKts} kts · Evacuation protocols initiated for coastal zones
+        <span className="text-ops-text text-xs truncate">
+          <strong>{selectedCyclone.name}</strong> ({selectedCyclone.category}) approaching landfall <strong>{selectedCyclone.landfallEta}</strong> · Sustained winds <strong>{formatWind(selectedCyclone.maxSustainedWindKts)}</strong> · Coastal precautionary safety protocols advised for <strong>{selectedCyclone.landfallLocation}</strong>
         </span>
       </div>
 
       <button
         onClick={() => setCurrentPage('alerts')}
-        className="flex items-center gap-1 text-[11px] font-mono text-ops-amber hover:text-white underline-offset-2 hover:underline ml-4 flex-shrink-0"
+        className="flex items-center gap-1 text-[11px] font-mono font-bold text-ops-amber hover:underline ml-4 flex-shrink-0 cursor-pointer"
       >
-        <span>DISPATCH BULLETIN</span>
+        <span>VIEW ADVISORY</span>
         <ChevronRight className="w-3.5 h-3.5" />
       </button>
     </div>

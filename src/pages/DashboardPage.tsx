@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   Wind, 
   Gauge, 
@@ -14,7 +14,11 @@ import {
   CheckCircle2, 
   AlertTriangle,
   ArrowUpRight,
-  Maximize2
+  ShieldCheck,
+  HelpCircle,
+  Clock,
+  Sparkles,
+  PhoneCall
 } from 'lucide-react';
 import { useCyclone } from '../context/CycloneContext';
 import { MetricCard } from '../components/ui/MetricCard';
@@ -28,184 +32,213 @@ export const DashboardPage: React.FC = () => {
     formatPressure 
   } = useCyclone();
 
+  const [checkedSafetyItems, setCheckedSafetyItems] = useState<{ [key: string]: boolean }>({});
+
+  const toggleSafetyItem = (key: string) => {
+    setCheckedSafetyItems(prev => ({
+      ...prev,
+      [key]: !prev[key]
+    }));
+  };
+
   return (
-    <div className="space-y-4 max-w-[1600px] mx-auto pb-6">
-      {/* Top Banner: Category & Cyclone Identification Header (Matching @reference.png left panel) */}
-      <div className="bg-ops-card border border-ops-border rounded p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="px-2.5 py-1 rounded bg-amber-950/90 text-ops-amber border border-ops-amber/40 font-mono text-xs font-bold uppercase tracking-wider">
-            {selectedCyclone.category}
-          </span>
-          <h2 className="text-xl sm:text-2xl font-black text-white tracking-wide font-sans uppercase">
+    <div className="space-y-5 max-w-[1600px] mx-auto pb-8">
+      {/* Top Banner: Cyclone Identity & Plain-Language Risk Assessment */}
+      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col lg:flex-row lg:items-center justify-between gap-4 transition-colors">
+        <div className="space-y-1.5 min-w-0">
+          <div className="flex flex-wrap items-center gap-2.5">
+            <span className="px-3 py-1 rounded-full bg-amber-500/10 text-ops-amber border border-amber-500/30 font-mono text-xs font-bold uppercase tracking-wider">
+              {selectedCyclone.category}
+            </span>
+            <span className="px-2.5 py-0.5 rounded-full bg-red-500/10 text-ops-red border border-red-500/30 text-xs font-bold">
+              ● LANDFALL {selectedCyclone.landfallEta}
+            </span>
+            <span className="text-xs font-mono text-ops-cyan bg-sky-500/10 border border-sky-500/30 px-2.5 py-0.5 rounded-full">
+              📍 {selectedCyclone.currentPosition.coordinatesFormatted}
+            </span>
+          </div>
+
+          <h1 className="text-2xl sm:text-3xl font-black text-ops-text tracking-tight font-sans uppercase">
             {selectedCyclone.name} ({selectedCyclone.code})
-          </h2>
-          <span className="text-xs font-mono text-ops-cyan bg-cyan-950/60 border border-ops-cyan/30 px-2 py-0.5 rounded">
-            LOC: {selectedCyclone.currentPosition.coordinatesFormatted} · LIVE RECONNAISSANCE
-          </span>
+          </h1>
+
+          <p className="text-sm text-ops-text-dim font-sans max-w-3xl">
+            Currently moving <strong>{selectedCyclone.movementVector.direction}</strong> towards <strong>{selectedCyclone.landfallLocation}</strong> at {formatWind(selectedCyclone.movementVector.speedKts)}. High coastal storm surge and strong gale-force winds expected.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2.5 flex-shrink-0">
           <button
             onClick={() => setCurrentPage('live-map')}
-            className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-ops-cyan text-xs font-mono font-bold flex items-center gap-1.5 border border-ops-border transition-colors"
+            className="px-4 py-2.5 rounded-lg bg-ops-cyan hover:bg-sky-600 text-white text-xs font-mono font-bold flex items-center gap-2 shadow-md shadow-sky-500/20 transition-all cursor-pointer"
           >
-            <span>EXPAND FULL MAP</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
+            <span>EXPLORE LIVE MAP</span>
+            <ArrowUpRight className="w-4 h-4" />
           </button>
           <button
-            onClick={() => setCurrentPage('analysis')}
-            className="px-3 py-1.5 rounded bg-ops-amber/20 hover:bg-ops-amber/30 text-ops-amber text-xs font-mono font-bold flex items-center gap-1.5 border border-ops-amber/40 transition-colors"
+            onClick={() => setCurrentPage('alerts')}
+            className="px-4 py-2.5 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-ops-amber text-xs font-mono font-bold flex items-center gap-2 border border-amber-500/30 transition-all cursor-pointer"
           >
-            <span>ML ANALYSIS</span>
-            <ArrowUpRight className="w-3.5 h-3.5" />
+            <span>SAFETY ADVISORIES</span>
+            <ArrowUpRight className="w-4 h-4" />
           </button>
         </div>
       </div>
 
-      {/* Primary Telemetry Grid (Matching @reference.png: Max Wind, Pressure, Movement, Eyewall + Mini Radar View) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* 1. Max Sustained Wind */}
+      {/* User-Centric Public Safety Action Deck */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Card 1: What You Should Do Right Now */}
+        <div className="lg:col-span-2 bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card space-y-4">
+          <div className="flex items-center justify-between border-b border-ops-border-subtle pb-3">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-5 h-5 text-ops-green" />
+              <h2 className="text-sm font-bold text-ops-text uppercase tracking-wider font-sans">
+                COMMUNITY SAFETY CHECKLIST & ACTION STEPS
+              </h2>
+            </div>
+            <span className="text-[11px] font-mono text-ops-text-muted">
+              OFFICIAL DISASTER ADVISORY
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-sans">
+            {[
+              { id: 'item-1', text: 'Avoid beaches, coastal promenades, and small watercraft.', tag: 'CRITICAL' },
+              { id: 'item-2', text: 'Secure loose outdoor furniture, tin roofs, and window panels.', tag: 'PROPERTY' },
+              { id: 'item-3', text: 'Charge mobile devices, emergency power banks, and store clean drinking water.', tag: 'SUPPLIES' },
+              { id: 'item-4', text: 'Keep family emergency contacts and local district helpline numbers handy.', tag: 'SAFETY' }
+            ].map(item => (
+              <div 
+                key={item.id}
+                onClick={() => toggleSafetyItem(item.id)}
+                className={`p-3 rounded-lg border flex items-start gap-3 cursor-pointer transition-all ${
+                  checkedSafetyItems[item.id]
+                    ? 'bg-emerald-500/10 border-emerald-500/40 text-ops-green'
+                    : 'bg-ops-card-sub border-ops-border hover:border-ops-border-light text-ops-text'
+                }`}
+              >
+                <input 
+                  type="checkbox" 
+                  checked={!!checkedSafetyItems[item.id]} 
+                  onChange={() => {}}
+                  className="mt-0.5 accent-emerald-600 rounded cursor-pointer"
+                />
+                <div>
+                  <div className="font-semibold leading-relaxed">{item.text}</div>
+                  <span className="text-[10px] font-mono text-ops-text-muted mt-1 inline-block">
+                    [{item.tag}]
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="flex items-center justify-between pt-1 text-xs text-ops-text-dim">
+            <div className="flex items-center gap-2">
+              <PhoneCall className="w-4 h-4 text-ops-cyan" />
+              <span>National Disaster Helpline: <strong className="text-ops-text font-mono">1078 / 112</strong></span>
+            </div>
+            <span className="text-[11px] font-mono text-ops-green">
+              {Object.values(checkedSafetyItems).filter(Boolean).length}/4 Steps Checked
+            </span>
+          </div>
+        </div>
+
+        {/* Card 2: Threat Summary Rating */}
+        <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col justify-between space-y-3">
+          <div>
+            <div className="flex items-center justify-between text-[11px] font-mono font-bold text-ops-text-muted uppercase">
+              <span>LOCAL THREAT LEVEL</span>
+              <AlertTriangle className="w-4 h-4 text-ops-amber" />
+            </div>
+
+            <div className="mt-2 text-2xl font-black text-ops-amber font-sans">
+              HIGH RISK ZONE
+            </div>
+            <div className="text-xs text-ops-text-dim mt-1">
+              Target Landfall: <strong className="text-ops-text">{selectedCyclone.landfallLocation}</strong>
+            </div>
+
+            <div className="mt-4 space-y-2 text-xs font-mono">
+              <div className="flex justify-between border-b border-ops-border-subtle pb-1.5">
+                <span className="text-ops-text-muted">Expected Wind:</span>
+                <strong className="text-ops-amber">{formatWind(selectedCyclone.maxSustainedWindKts)} (Gusts {selectedCyclone.windGustsKts} kts)</strong>
+              </div>
+              <div className="flex justify-between border-b border-ops-border-subtle pb-1.5">
+                <span className="text-ops-text-muted">Expected Storm Surge:</span>
+                <strong className="text-ops-red">1.5m – 2.5m Inundation</strong>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-ops-text-muted">Heavy Rainfall:</span>
+                <strong className="text-ops-cyan">150 – 250 mm / 24h</strong>
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setCurrentPage('help')}
+            className="w-full py-2 rounded-lg bg-ops-card-sub hover:bg-ops-card border border-ops-border text-ops-cyan text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-colors"
+          >
+            <HelpCircle className="w-3.5 h-3.5" />
+            <span>HOW TO READ CYCLONE CATEGORIES</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Primary Key Telemetry Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* 1. Maximum Wind Speed */}
         <MetricCard
-          label="MAX SUSTAINED WIND"
-          value={selectedCyclone.maxSustainedWindKts}
-          unit="KTS"
+          label="ESTIMATED MAX WIND"
+          value={formatWind(selectedCyclone.maxSustainedWindKts)}
           highlightColor="orange"
-          subtext={`Gusting to ${selectedCyclone.windGustsKts} kts (extreme)`}
+          badge="INTENSITY"
+          badgeVariant="orange"
+          subtext={`Extreme gusts up to ${formatWind(selectedCyclone.windGustsKts)}`}
         />
 
-        {/* 2. Min Central Pressure */}
+        {/* 2. Central Barometric Pressure */}
         <MetricCard
           label="MIN CENTRAL PRESSURE"
-          value={selectedCyclone.minCentralPressureHpa}
-          unit="hPa"
+          value={formatPressure(selectedCyclone.minCentralPressureHpa)}
           highlightColor="cyan"
-          subtext={`Pressure dropping ${selectedCyclone.pressureTrendHpaHr}hPa/hr`}
+          badge="BAROMETER"
+          badgeVariant="cyan"
+          subtext={`Pressure trend: ${selectedCyclone.pressureTrendHpaHr} hPa/hr (Intensifying)`}
         />
 
-        {/* 3. Movement Vector */}
+        {/* 3. Movement & Direction */}
         <MetricCard
           label="MOVEMENT VECTOR"
-          value={`${selectedCyclone.movementVector.direction} @ ${selectedCyclone.movementVector.speedKts}`}
-          unit="KTS"
+          value={`${selectedCyclone.movementVector.direction} @ ${formatWind(selectedCyclone.movementVector.speedKts)}`}
           highlightColor="neutral"
-          subtext={`Heading ${selectedCyclone.movementVector.headingDegrees}° True`}
+          badge="TRAJECTORY"
+          badgeVariant="green"
+          subtext={`Compass heading: ${selectedCyclone.movementVector.headingDegrees}° True`}
         />
 
-        {/* 4. Eye Wall Diameter */}
+        {/* 4. Eye Core Definition */}
         <MetricCard
           label="EYE WALL DIAMETER"
-          value={selectedCyclone.eyeWallDiameterKm}
-          unit="KM"
+          value={`${selectedCyclone.eyeWallDiameterKm} KM`}
           highlightColor="neutral"
+          badge="SATELLITE"
+          badgeVariant="cyan"
           subtext={selectedCyclone.eyeWallStructure}
         />
       </div>
 
-      {/* Middle Telemetry Row: Embedded Radar Path View + Ocean Dynamics */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Embedded Radar Path View (Matching @reference.png: EMBEDDED RADAR PATH VIEW) */}
-        <div className="lg:col-span-1 bg-ops-card border border-ops-border rounded p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-bold tracking-wider text-ops-text-muted uppercase">
-              EMBEDDED RADAR PATH VIEW
-            </span>
-            <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-amber-950/80 text-ops-amber border border-ops-amber/30">
-              RADAR ACTV
-            </span>
-          </div>
-
-          {/* Mini Vector Trajectory Graphic */}
-          <div className="relative h-32 bg-[#070b13] border border-ops-border-subtle rounded flex items-center justify-center overflow-hidden">
-            <div className="absolute inset-0 radar-grid opacity-40" />
-            <svg className="w-full h-full" viewBox="0 0 300 120">
-              <path d="M 40,90 L 120,65 L 200,30 L 260,20" fill="none" stroke="#00f0ff" strokeWidth="2.5" />
-              <circle cx="40" cy="90" r="3" fill="#00f0ff" />
-              <circle cx="120" cy="65" r="3" fill="#00f0ff" />
-              <circle cx="200" cy="30" r="5" fill="#f97316" stroke="#ffffff" strokeWidth="1.5" />
-              <circle cx="260" cy="20" r="3" fill="#ea580c" />
-              <text x="210" y="32" fill="#22c55e" fontSize="9" fontFamily="JetBrains Mono" fontWeight="bold">
-                ISLAND GATEWAY
-              </text>
-            </svg>
-          </div>
-
-          <div className="mt-2 flex items-center justify-between text-[11px] font-mono text-ops-text-dim">
-            <span>RADAR REFLECTIVITY: <strong className="text-slate-200">54 dBZ</strong></span>
-            <span className="text-ops-cyan">DOPPLER SWEEP OK</span>
-          </div>
-        </div>
-
-        {/* Environmental Dynamics: Sea Surface Temp, Wind Shear, ACE, Forecast Cone */}
-        <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* Sea Surface Temp */}
-          <div className="bg-ops-card border border-ops-border rounded p-3 flex flex-col justify-between">
-            <div className="text-[9px] font-bold tracking-wider text-ops-text-muted uppercase">
-              SEA SURFACE TEMP (SST)
-            </div>
-            <div className="my-1.5 flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-100">{selectedCyclone.seaSurfaceTempC}°C</span>
-              <span className="text-xs font-mono font-bold text-ops-amber">+{selectedCyclone.seaSurfaceAnomalyC}°C anomaly</span>
-            </div>
-            <div className="text-[10px] text-ops-text-dim leading-tight">
-              Thermal limit exceeded for storm intensification
-            </div>
-          </div>
-
-          {/* Wind Shear */}
-          <div className="bg-ops-card border border-ops-border rounded p-3 flex flex-col justify-between">
-            <div className="text-[9px] font-bold tracking-wider text-ops-text-muted uppercase">
-              WIND SHEAR INDEX
-            </div>
-            <div className="my-1.5 flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-100">{selectedCyclone.windShearKts}</span>
-              <span className="text-xs font-mono text-ops-green font-bold">kts Low Shear (favorable)</span>
-            </div>
-            <div className="text-[10px] text-ops-text-dim leading-tight">
-              Favorable upper-level environment remains stable
-            </div>
-          </div>
-
-          {/* Accumulated Cyclone Energy (ACE) */}
-          <div className="bg-ops-card border border-ops-border rounded p-3 flex flex-col justify-between">
-            <div className="text-[9px] font-bold tracking-wider text-ops-text-muted uppercase">
-              ACCUM. CYCLONE ENERGY
-            </div>
-            <div className="my-1.5 flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-100">{selectedCyclone.accumulatedCycloneEnergyACE}</span>
-              <span className="text-xs font-mono text-ops-amber font-bold">{selectedCyclone.acePercentageOfNormal}% of seasonal normal</span>
-            </div>
-            <div className="text-[10px] text-ops-text-dim leading-tight">
-              Highly active developmental corridor
-            </div>
-          </div>
-
-          {/* Forecast Cone Uncertainty */}
-          <div className="bg-ops-card border border-ops-border rounded p-3 flex flex-col justify-between">
-            <div className="text-[9px] font-bold tracking-wider text-ops-text-muted uppercase">
-              FORECAST CONE UNCERTAINTY
-            </div>
-            <div className="my-1.5 flex items-baseline gap-1.5">
-              <span className="text-2xl font-black text-slate-100">{selectedCyclone.forecastConeUncertaintyPct}%</span>
-              <span className="text-xs font-mono text-ops-cyan font-bold">Confidence: HIGH</span>
-            </div>
-            <div className="text-[10px] text-ops-text-dim leading-tight">
-              Ensemble paths converge heavily on land vectors
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Real-time Operational Log Deck (Matching @reference.png: REAL-TIME OPERATIONAL LOG) */}
-      <div className="bg-ops-card border border-ops-border rounded p-4">
-        <div className="flex items-center justify-between pb-2 mb-3 border-b border-ops-border-subtle">
+      {/* Real-time Community & Meteorological Updates Log */}
+      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card">
+        <div className="flex items-center justify-between pb-3 mb-3 border-b border-ops-border-subtle">
           <div className="flex items-center gap-2">
             <Activity className="w-4 h-4 text-ops-cyan" />
-            <span className="text-xs font-bold tracking-wider text-slate-200 uppercase font-sans">
-              REAL-TIME OPERATIONAL LOG
-            </span>
+            <h2 className="text-xs font-bold tracking-wider text-ops-text uppercase font-sans">
+              REAL-TIME SATELLITE & COMMUNITY OBSERVATION STREAM
+            </h2>
           </div>
           <span className="text-[10px] font-mono text-ops-text-muted">
-            AUTO-STREAM ACTIVE · 20 LATEST TELEMETRY EVENTS
+            AUTO-STREAMING TELEMETRY (MOSDAC / INSAT-3DR)
           </span>
         </div>
 
@@ -214,32 +247,32 @@ export const DashboardPage: React.FC = () => {
             const getDotColor = () => {
               switch (log.severity) {
                 case 'red':
-                  return 'bg-ops-red text-ops-red';
+                  return 'bg-red-500';
                 case 'amber':
-                  return 'bg-ops-amber text-ops-amber';
+                  return 'bg-ops-amber';
                 case 'cyan':
-                  return 'bg-ops-cyan text-ops-cyan';
+                  return 'bg-ops-cyan';
                 case 'green':
                 default:
-                  return 'bg-ops-green text-ops-green';
+                  return 'bg-ops-green';
               }
             };
 
             return (
               <div 
                 key={log.id} 
-                className="flex items-start justify-between gap-3 p-1.5 rounded hover:bg-slate-900/80 transition-colors border-b border-ops-border-subtle/50"
+                className="flex items-start justify-between gap-3 p-2 rounded-lg hover:bg-ops-card-hover transition-colors border-b border-ops-border-subtle"
               >
                 <div className="flex items-start gap-3 min-w-0">
-                  <span className="text-slate-400 font-semibold flex-shrink-0 text-[11px]">
+                  <span className="text-ops-text-muted font-semibold flex-shrink-0 text-[11px]">
                     {log.timestamp}
                   </span>
-                  <span className={`w-2 h-2 rounded-full mt-1 flex-shrink-0 ${getDotColor()}`} />
-                  <span className="text-slate-200 text-[11px] leading-tight font-sans">
+                  <span className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${getDotColor()}`} />
+                  <span className="text-ops-text text-xs leading-relaxed font-sans">
                     {log.message}
                   </span>
                 </div>
-                <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800 flex-shrink-0">
+                <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-ops-card-sub text-ops-text-muted border border-ops-border flex-shrink-0">
                   {log.source}
                 </span>
               </div>

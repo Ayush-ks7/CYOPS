@@ -5,11 +5,9 @@ import { AlertMarquee } from './AlertMarquee';
 import { useCyclone } from '../../context/CycloneContext';
 
 export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { selectedCyclone } = useCyclone();
-
   return (
-    <div className="flex h-screen w-screen bg-ops-bg text-slate-100 overflow-hidden font-sans">
-      {/* Left Mission Control Sidebar */}
+    <div className="flex h-screen w-screen bg-ops-bg text-ops-text overflow-hidden font-sans transition-colors">
+      {/* Left Navigation Sidebar */}
       <Sidebar />
 
       {/* Main Workspace Area */}
@@ -17,8 +15,11 @@ export const Shell: React.FC<{ children: React.ReactNode }> = ({ children }) => 
         <TopHeader />
         <AlertMarquee />
 
-        {/* Content Viewport */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6 custom-scrollbar bg-[#080c14] relative">
+        {/* Scrollable Viewport with Hidden Scrollbar & Smooth Scroll */}
+        <main 
+          id="main-scroll-container" 
+          className="flex-1 overflow-y-auto p-4 md:p-6 bg-ops-bg relative transition-colors"
+        >
           {children}
         </main>
       </div>

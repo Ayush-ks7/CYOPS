@@ -24,8 +24,10 @@ export type ActivePage =
 
 export type WindUnit = 'KTS' | 'KMH' | 'MS' | 'MPH';
 export type PressureUnit = 'HPA' | 'MBAR' | 'INHG';
+export type AppTheme = 'light' | 'dark';
 
 export interface MapLayerConfig {
+  satellite: boolean;
   infrared: boolean;
   waterVapour: boolean;
   radarMatrix: boolean;
@@ -33,10 +35,16 @@ export interface MapLayerConfig {
   forecastTrack: boolean;
   historicalTrack: boolean;
   uncertaintyCone: boolean;
-  coastalStations: boolean;
+  coastalRiskZones: boolean;
 }
 
 interface CycloneContextType {
+  // Theme
+  theme: AppTheme;
+  setTheme: (theme: AppTheme) => void;
+  toggleTheme: () => void;
+
+  // Navigation & Storm Selection
   currentPage: ActivePage;
   setCurrentPage: (page: ActivePage) => void;
   selectedCyclone: CycloneData;
@@ -49,9 +57,13 @@ interface CycloneContextType {
   isPlayingSimulation: boolean;
   setIsPlayingSimulation: (playing: boolean) => void;
   
-  // Map layers
+  // Shared Map state
   mapLayers: MapLayerConfig;
   toggleMapLayer: (layerKey: keyof MapLayerConfig) => void;
+  mapCenter: [number, number]; // [lat, lng]
+  setMapCenter: (center: [number, number]) => void;
+  mapZoom: number;
+  setMapZoom: (zoom: number) => void;
   
   // Alerts & logs
   alerts: OperationalAlert[];
@@ -95,17 +107,50 @@ export const TIMELINE_STEPS = [
 ];
 
 export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Theme state: Default is 'light' as requested
+  const [theme, setThemeState] = useState<AppTheme>(() => {
+    const saved = localStorage.getItem('cycloneops_theme') as AppTheme | null;
+    return saved === 'dark' ? 'dark' : 'light'; // Default to 'light'
+  });
+
+  const setTheme = (newTheme: AppTheme) => {
+    setThemeState(newTheme);
+    localStorage.setItem('cycloneops_theme', newTheme);
+  };
+
+  const toggleTheme = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      root.classList.remove('light');
+    } else {
+      root.classList.remove('dark');
+      root.classList.add('light');
+    }
+  }, [theme]);
+
   const [currentPage, setCurrentPage] = useState<ActivePage>('dashboard');
-  const [selectedCyclone, setSelectedCyclone] = useState<CycloneData>(PRIMARY_ACTIVE_CYCLONE);
+  
+  // Default to SECONDARY_ACTIVE_CYCLONE ('CYCLONE DANA' in Bay of Bengal near India) as default prototype location
+  const [selectedCyclone, setSelectedCyclone] = useState<CycloneData>(SECONDARY_ACTIVE_CYCLONE);
   const [allActiveCyclones] = useState<CycloneData[]>(ALL_CYCLONES);
   const [detailArchiveId, setDetailArchiveId] = useState<string | null>('amphan-2020');
+
+  // Shared map viewport state (Default centered on India: [20.5937, 78.9629] or Bay of Bengal / India [19.0, 83.5], zoom 5)
+  const [mapCenter, setMapCenter] = useState<[number, number]>([19.0, 83.5]);
+  const [mapZoom, setMapZoom] = useState<number>(5);
 
   // Timeline
   const [timelineStep, setTimelineStep] = useState<string>('LIVE (T+0h)');
   const [isPlayingSimulation, setIsPlayingSimulation] = useState<boolean>(false);
 
-  // Map Layers
+  // Map Layers (consistent between Live Map & Imagery pages)
   const [mapLayers, setMapLayers] = useState<MapLayerConfig>({
+    satellite: false,
     infrared: true,
     waterVapour: false,
     radarMatrix: true,
@@ -113,7 +158,7 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
     forecastTrack: true,
     historicalTrack: true,
     uncertaintyCone: true,
-    coastalStations: true,
+    coastalRiskZones: true,
   });
 
   const toggleMapLayer = (layerKey: keyof MapLayerConfig) => {
@@ -131,7 +176,7 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setAlerts(prev =>
       prev.map(a =>
         a.id === alertId
-          ? { ...a, isAcknowledged: true, acknowledgedBy: 'DUTY CHIEF (DECK A)' }
+          ? { ...a, isAcknowledged: true, acknowledgedBy: 'COMMUNITY SAFETY DISPATCH' }
           : a
       )
     );
@@ -151,7 +196,7 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   // Settings
-  const [windUnit, setWindUnit] = useState<WindUnit>('KTS');
+  const [windUnit, setWindUnit] = useState<WindUnit>('KMH'); // Default user-friendly km/h
   const [pressureUnit, setPressureUnit] = useState<PressureUnit>('HPA');
   const [dataRefreshIntervalSec, setDataRefreshIntervalSec] = useState<number>(30);
   const [soundAlertsEnabled, setSoundAlertsEnabled] = useState<boolean>(true);
@@ -189,14 +234,14 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const formatWind = (kts: number) => {
     switch (windUnit) {
       case 'KMH':
-        return `${Math.round(kts * 1.852)} KM/H`;
+        return `${Math.round(kts * 1.852)} km/h`;
       case 'MS':
-        return `${Math.round(kts * 0.514444)} M/S`;
+        return `${Math.round(kts * 0.514444)} m/s`;
       case 'MPH':
-        return `${Math.round(kts * 1.15078)} MPH`;
+        return `${Math.round(kts * 1.15078)} mph`;
       case 'KTS':
       default:
-        return `${kts} KTS`;
+        return `${kts} kts`;
     }
   };
 
@@ -215,6 +260,9 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
   return (
     <CycloneContext.Provider
       value={{
+        theme,
+        setTheme,
+        toggleTheme,
         currentPage,
         setCurrentPage,
         selectedCyclone,
@@ -226,6 +274,10 @@ export const CycloneProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setIsPlayingSimulation,
         mapLayers,
         toggleMapLayer,
+        mapCenter,
+        setMapCenter,
+        mapZoom,
+        setMapZoom,
         alerts,
         acknowledgeAlert,
         operationalLogs,

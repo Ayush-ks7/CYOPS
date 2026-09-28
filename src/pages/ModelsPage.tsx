@@ -26,22 +26,21 @@ export const ModelsPage: React.FC = () => {
   return (
     <div className="space-y-6 max-w-[1600px] mx-auto pb-8">
       {/* Header Banner */}
-      <div className="bg-ops-card border border-ops-border rounded p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="text-[10px] font-mono tracking-widest text-ops-cyan uppercase font-bold flex items-center gap-1.5">
             <BrainCircuit className="w-3.5 h-3.5" />
-            AI / MACHINE LEARNING CORE ENGINES
+            AI & MACHINE LEARNING PREDICTIVE MODELS
           </div>
-          <h1 className="text-xl font-extrabold text-white uppercase tracking-wider font-sans mt-0.5">
-            Model Architecture & Quantitative Benchmarks
+          <h1 className="text-xl font-extrabold text-ops-text uppercase tracking-wider font-sans mt-0.5">
+            Model Architectures & Validation Accuracy
           </h1>
         </div>
 
-        {/* Hardware Acceleration Status */}
         <div className="flex items-center gap-3 text-xs font-mono">
-          <div className="bg-slate-900 border border-ops-border px-3 py-1.5 rounded flex items-center gap-2">
+          <div className="bg-ops-card-sub border border-ops-border px-3.5 py-2 rounded-lg flex items-center gap-2">
             <Zap className="w-3.5 h-3.5 text-ops-amber" />
-            <span className="text-slate-300">NVIDIA TensorRT 10.0 (FP16 Active)</span>
+            <span className="text-ops-text font-bold">TensorRT AI Acceleration Active</span>
           </div>
         </div>
       </div>
@@ -51,17 +50,17 @@ export const ModelsPage: React.FC = () => {
         {/* Model 1 Tab */}
         <button
           onClick={() => setSelectedModelTab('identification')}
-          className={`p-4 rounded border text-left transition-all ${
+          className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
             selectedModelTab === 'identification'
-              ? 'bg-slate-800/80 border-ops-cyan shadow-ops-glow'
-              : 'bg-ops-card border-ops-border hover:border-slate-600'
+              ? 'bg-ops-cyan/10 border-ops-cyan shadow-sm ring-1 ring-ops-cyan'
+              : 'bg-ops-card border-ops-border hover:border-ops-border-light'
           }`}
         >
           <div className="flex items-center justify-between text-[10px] font-mono uppercase mb-1">
             <span className="text-ops-cyan font-bold">1. IDENTIFICATION</span>
             <span className="text-ops-green font-bold">● ONLINE</span>
           </div>
-          <div className="text-base font-bold text-white font-sans">
+          <div className="text-base font-bold text-ops-text font-sans">
             {ML_MODELS_SPECS.identification.name}
           </div>
           <div className="text-xs text-ops-text-dim mt-1 font-sans">
@@ -72,17 +71,17 @@ export const ModelsPage: React.FC = () => {
         {/* Model 2 Tab */}
         <button
           onClick={() => setSelectedModelTab('classification')}
-          className={`p-4 rounded border text-left transition-all ${
+          className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
             selectedModelTab === 'classification'
-              ? 'bg-slate-800/80 border-ops-amber shadow-ops-amber'
-              : 'bg-ops-card border-ops-border hover:border-slate-600'
+              ? 'bg-amber-500/10 border-ops-amber shadow-sm ring-1 ring-amber-500'
+              : 'bg-ops-card border-ops-border hover:border-ops-border-light'
           }`}
         >
           <div className="flex items-center justify-between text-[10px] font-mono uppercase mb-1">
             <span className="text-ops-amber font-bold">2. CLASSIFICATION</span>
             <span className="text-ops-green font-bold">● ONLINE</span>
           </div>
-          <div className="text-base font-bold text-white font-sans">
+          <div className="text-base font-bold text-ops-text font-sans">
             {ML_MODELS_SPECS.classification.name}
           </div>
           <div className="text-xs text-ops-text-dim mt-1 font-sans">
@@ -93,17 +92,17 @@ export const ModelsPage: React.FC = () => {
         {/* Model 3 Tab */}
         <button
           onClick={() => setSelectedModelTab('prediction')}
-          className={`p-4 rounded border text-left transition-all ${
+          className={`p-4 rounded-xl border text-left transition-all cursor-pointer ${
             selectedModelTab === 'prediction'
-              ? 'bg-slate-800/80 border-purple-500 shadow-ops-glow'
-              : 'bg-ops-card border-ops-border hover:border-slate-600'
+              ? 'bg-purple-500/10 border-purple-500 shadow-sm ring-1 ring-purple-500'
+              : 'bg-ops-card border-ops-border hover:border-ops-border-light'
           }`}
         >
           <div className="flex items-center justify-between text-[10px] font-mono uppercase mb-1">
-            <span className="text-purple-400 font-bold">3. PREDICTION</span>
+            <span className="text-purple-600 font-bold">3. PREDICTION</span>
             <span className="text-ops-green font-bold">● ONLINE</span>
           </div>
-          <div className="text-base font-bold text-white font-sans">
+          <div className="text-base font-bold text-ops-text font-sans">
             {ML_MODELS_SPECS.prediction.name}
           </div>
           <div className="text-xs text-ops-text-dim mt-1 font-sans">
@@ -112,14 +111,13 @@ export const ModelsPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Active Model Deep Dive Details */}
+      {/* Model Deep Dive Details */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left 2 Cols: Architecture Specs & Performance Benchmarks */}
         <div className="lg:col-span-2 space-y-4">
-          <div className="bg-ops-card border border-ops-border rounded p-5 space-y-4">
-            <div className="flex items-center justify-between border-b border-ops-border-subtle pb-2">
-              <span className="text-xs font-bold tracking-wider text-slate-200 uppercase font-sans">
-                NEURAL NETWORK ARCHITECTURE SPECIFICATIONS
+          <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card space-y-4">
+            <div className="flex items-center justify-between border-b border-ops-border-subtle pb-3">
+              <span className="text-xs font-bold tracking-wider text-ops-text uppercase font-sans">
+                NEURAL NETWORK ARCHITECTURE & TRAINING DATA
               </span>
               <span className="text-xs font-mono text-ops-cyan font-bold">
                 {activeModel.name}
@@ -127,13 +125,13 @@ export const ModelsPage: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-mono">
-              <div className="bg-slate-900/80 p-3 rounded border border-ops-border-subtle">
-                <div className="text-slate-400 text-[10px]">BACKBONE & TOPOLOGY</div>
-                <div className="text-white font-bold mt-1 text-[11px]">{activeModel.architecture}</div>
+              <div className="bg-ops-card-sub p-3.5 rounded-lg border border-ops-border">
+                <div className="text-ops-text-muted text-[10px]">BACKBONE & TOPOLOGY</div>
+                <div className="text-ops-text font-bold mt-1 text-[11px]">{activeModel.architecture}</div>
               </div>
 
-              <div className="bg-slate-900/80 p-3 rounded border border-ops-border-subtle">
-                <div className="text-slate-400 text-[10px]">INPUT TENSOR SHAPE & RADIANCE</div>
+              <div className="bg-ops-card-sub p-3.5 rounded-lg border border-ops-border">
+                <div className="text-ops-text-muted text-[10px]">INPUT TENSORS & SATELLITE CHANNELS</div>
                 <div className="text-ops-cyan font-bold mt-1 text-[11px]">{activeModel.inputData}</div>
               </div>
             </div>
@@ -141,12 +139,12 @@ export const ModelsPage: React.FC = () => {
             {/* Performance Benchmark Matrix */}
             <div>
               <div className="text-[10px] font-mono font-bold tracking-widest text-ops-text-muted uppercase mb-2">
-                EMPIRICAL VALIDATION METRICS (TEST BENCHMARK)
+                ACCURACY BENCHMARKS (TEST DATASET)
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs font-mono">
                 {Object.entries(activeModel.performance).map(([key, val]) => (
-                  <div key={key} className="bg-slate-900/60 p-2.5 rounded border border-ops-border-subtle">
-                    <div className="text-slate-400 text-[10px] uppercase truncate">{key.replace(/([A-Z])/g, ' $1')}</div>
+                  <div key={key} className="bg-ops-card-sub p-3 rounded-lg border border-ops-border">
+                    <div className="text-ops-text-muted text-[10px] uppercase truncate">{key.replace(/([A-Z])/g, ' $1')}</div>
                     <div className="text-ops-amber font-bold text-sm mt-0.5">{val}</div>
                   </div>
                 ))}
@@ -155,33 +153,32 @@ export const ModelsPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Right 1 Col: Spatial Attention & Inference Simulator */}
+        {/* Right Col: Attention Heatmap Simulation */}
         <div className="space-y-4">
-          <div className="bg-ops-card border border-ops-border rounded p-4 space-y-3">
+          <div className="bg-ops-card border border-ops-border rounded-xl p-5 shadow-ops-card space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-mono font-bold tracking-widest text-ops-cyan uppercase">
-                GRAD-CAM SPATIAL ATTENTION
+                SPATIAL ATTENTION FOCUS
               </span>
               <button
                 onClick={() => setShowAttentionHeatmap(!showAttentionHeatmap)}
-                className="text-[10px] font-mono text-ops-cyan underline"
+                className="text-[10px] font-mono text-ops-cyan underline cursor-pointer"
               >
-                {showAttentionHeatmap ? 'HIDE MASK' : 'SHOW MASK'}
+                {showAttentionHeatmap ? 'HIDE OVERLAY' : 'SHOW OVERLAY'}
               </button>
             </div>
 
-            {/* Simulated Attention Heatmap Graphic */}
-            <div className="relative h-44 bg-[#070b13] rounded border border-ops-border-subtle overflow-hidden flex items-center justify-center">
+            <div className="relative h-44 bg-slate-900 rounded-lg border border-ops-border overflow-hidden flex items-center justify-center">
               <div className="absolute inset-0 radar-grid opacity-30" />
               {showAttentionHeatmap ? (
                 <div 
                   className="w-32 h-32 rounded-full opacity-70 filter blur-md animate-pulse"
                   style={{
-                    background: 'radial-gradient(circle, #ef4444 0%, #f97316 40%, #00f0ff 75%, transparent 100%)'
+                    background: 'radial-gradient(circle, #ef4444 0%, #ea580c 40%, #0284c7 75%, transparent 100%)'
                   }}
                 />
               ) : (
-                <div className="text-xs font-mono text-slate-500">Grad-CAM overlay disabled</div>
+                <div className="text-xs font-mono text-ops-text-muted">Attention mask hidden</div>
               )}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <div className="w-12 h-12 rounded-full border border-white/60" />
@@ -189,28 +186,8 @@ export const ModelsPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="text-[11px] font-mono text-slate-300">
-              Spatial attention focal weights concentrate 92.4% gradient energy on eyewall cloud top boundary.
-            </div>
-          </div>
-
-          <div className="bg-ops-card border border-ops-border rounded p-4 space-y-2">
-            <div className="text-[10px] font-mono font-bold tracking-widest text-ops-green uppercase">
-              HARDWARE INFERENCE PIPELINE
-            </div>
-            <div className="space-y-1 text-xs font-mono text-slate-300">
-              <div className="flex justify-between">
-                <span className="text-slate-500">Cluster Node:</span>
-                <span className="text-white font-bold">2x NVIDIA H100 SXM5</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">GPU VRAM Allocated:</span>
-                <span className="text-ops-cyan font-bold">14.2 GB / 80 GB</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-slate-500">Batch Size:</span>
-                <span className="text-slate-200">1 (Real-time Streaming)</span>
-              </div>
+            <div className="text-[11px] font-mono text-ops-text-dim">
+              Spatial attention focal weights concentrate on eyewall convection and feeder bands for maximum intensity precision.
             </div>
           </div>
         </div>

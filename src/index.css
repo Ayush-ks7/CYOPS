@@ -2,54 +2,103 @@
 @tailwind components;
 @tailwind utilities;
 
+/* CSS Variables for Dynamic Light / Dark Theming */
+:root {
+  /* Default: LIGHT MODE */
+  --ops-bg: #f8fafc;
+  --ops-sidebar: #ffffff;
+  --ops-header: #ffffff;
+  --ops-card: #ffffff;
+  --ops-card-sub: #f1f5f9;
+  --ops-card-hover: #f8fafc;
+  --ops-border: #e2e8f0;
+  --ops-border-light: #cbd5e1;
+  --ops-border-subtle: #f1f5f9;
+  --ops-cyan: #0284c7;
+  --ops-cyan-muted: #0369a1;
+  --ops-sky: #0ea5e9;
+  --ops-amber: #ea580c;
+  --ops-orange: #c2410c;
+  --ops-red: #dc2626;
+  --ops-green: #16a34a;
+  --ops-text: #0f172a;
+  --ops-text-dim: #475569;
+  --ops-text-muted: #64748b;
+  --ops-shadow-card: 0 1px 3px 0 rgba(0, 0, 0, 0.06), 0 1px 2px -1px rgba(0, 0, 0, 0.04);
+  color-scheme: light;
+}
+
+.dark {
+  /* DARK MODE */
+  --ops-bg: #080c14;
+  --ops-sidebar: #0a0f19;
+  --ops-header: #0d1320;
+  --ops-card: #0f1726;
+  --ops-card-sub: #0b111d;
+  --ops-card-hover: #152136;
+  --ops-border: #1a2742;
+  --ops-border-light: #223456;
+  --ops-border-subtle: #141e33;
+  --ops-cyan: #00f0ff;
+  --ops-cyan-muted: #0284c7;
+  --ops-sky: #38bdf8;
+  --ops-amber: #f97316;
+  --ops-orange: #ea580c;
+  --ops-red: #ef4444;
+  --ops-green: #22c55e;
+  --ops-text: #e2e8f0;
+  --ops-text-dim: #94a3b8;
+  --ops-text-muted: #64748b;
+  --ops-shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+
 @layer base {
-  :root {
-    --bg-primary: #080c14;
-    --bg-card: #0f1726;
-    --border-color: #1a2742;
-    --accent-cyan: #00f0ff;
-    --accent-amber: #f97316;
-  }
-
   body {
-    background-color: #080c14;
-    color: #e2e8f0;
+    background-color: var(--ops-bg);
+    color: var(--ops-text);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  /* Scientific custom dark scrollbar */
+  /* Completely hide scrollbars across all browsers while keeping scrolling fully functional */
+  * {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
-  ::-webkit-scrollbar-track {
-    background: #090e18;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #1e2c47;
-    border-radius: 3px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: #2b3e64;
-  }
+}
+
+/* Lenis Smooth Scroll Styles */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 /* Custom Radar / Mission Control Utilities */
 .radar-grid {
   background-size: 30px 30px;
   background-image: 
+    linear-gradient(to right, rgba(2, 132, 199, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(2, 132, 199, 0.08) 1px, transparent 1px);
+}
+
+.dark .radar-grid {
+  background-image: 
     linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
-}
-
-.radar-sweep {
-  background: conic-gradient(from 0deg at 50% 50%, rgba(0, 240, 255, 0) 0deg, rgba(0, 240, 255, 0.15) 60deg, transparent 60.1deg);
-  animation: radar-spin 4s linear infinite;
-}
-
-@keyframes radar-spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
 }
 
 @keyframes pulse-ring {
@@ -71,52 +120,74 @@
   animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-/* Leaflet Dark Nautical Map Overrides */
-.leaflet-container {
-  background-color: #080c14 !important;
-  font-family: 'Inter', sans-serif !important;
-}
-
-.leaflet-control-zoom a {
-  background-color: #0f1726 !important;
-  color: #00f0ff !important;
-  border: 1px solid #1a2742 !important;
-}
-
-.leaflet-control-zoom a:hover {
-  background-color: #1a2742 !important;
-  color: #ffffff !important;
-}
-
-.leaflet-control-attribution {
-  background-color: rgba(8, 12, 20, 0.85) !important;
-  color: #64748b !important;
-  font-size: 10px !important;
-  border-top-left-radius: 4px;
-}
-
-.leaflet-control-attribution a {
-  color: #0284c7 !important;
-}
-
 /* Monospace Telemetry */
 .font-telemetry {
   font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
   letter-spacing: -0.02em;
 }
 
-/* Glassmorphism restrained */
-.ops-glass {
-  background: rgba(15, 23, 38, 0.85);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid #1a2742;
+/* Leaflet Map Overrides for Light & Dark without any API keys */
+.leaflet-container {
+  font-family: 'Inter', sans-serif !important;
+  z-index: 1;
+  background-color: var(--ops-bg) !important;
 }
 
-.ops-card-glow {
-  box-shadow: 0 0 15px -3px rgba(0, 240, 255, 0.12);
+/* Clean Dark Mode filter on OpenStreetMap tiles */
+.dark .leaflet-tile-pane {
+  filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35);
 }
 
-.ops-warning-glow {
-  box-shadow: 0 0 20px -3px rgba(249, 115, 22, 0.25);
+/* When satellite earth imagery is enabled, show true colors */
+.satellite-mode .leaflet-tile-pane {
+  filter: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  background: var(--ops-card) !important;
+  color: var(--ops-text) !important;
+  border: 1px solid var(--ops-border) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2) !important;
+  padding: 0 !important;
+}
+
+.leaflet-popup-content {
+  margin: 10px 14px !important;
+  line-height: 1.4 !important;
+}
+
+.leaflet-popup-tip {
+  background: var(--ops-card) !important;
+}
+
+.leaflet-control-zoom {
+  border: 1px solid var(--ops-border) !important;
+  border-radius: 8px !important;
+  overflow: hidden;
+  box-shadow: var(--ops-shadow-card) !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: var(--ops-card) !important;
+  color: var(--ops-text) !important;
+  border-bottom: 1px solid var(--ops-border) !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: var(--ops-card-sub) !important;
+  color: var(--ops-cyan) !important;
+}
+
+.leaflet-control-attribution {
+  background-color: var(--ops-card) !important;
+  color: var(--ops-text-muted) !important;
+  font-size: 10px !important;
+  opacity: 0.9;
+  border-top-left-radius: 6px;
+  padding: 2px 6px !important;
+}
+
+.leaflet-control-attribution a {
+  color: var(--ops-cyan) !important;
 }

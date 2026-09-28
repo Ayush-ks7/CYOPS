@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import Lenis from 'lenis';
+import gsap from 'gsap';
 import { CycloneProvider, useCyclone } from './context/CycloneContext';
 import { Shell } from './components/layout/Shell';
 import { DashboardPage } from './pages/DashboardPage';
@@ -16,6 +18,29 @@ import { SettingsPage } from './pages/SettingsPage';
 
 const AppContent: React.FC = () => {
   const { currentPage } = useCyclone();
+
+  // Initialize Lenis + GSAP Smooth Scrolling
+  useEffect(() => {
+    const scrollContainer = document.getElementById('main-scroll-container');
+    const lenis = new Lenis({
+      wrapper: scrollContainer || window,
+      content: scrollContainer ? (scrollContainer.firstElementChild as HTMLElement) || scrollContainer : document.body,
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+
+    const raf = (time: number) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+    const frameId = requestAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(frameId);
+      lenis.destroy();
+    };
+  }, [currentPage]);
 
   const renderCurrentPage = () => {
     switch (currentPage) {
