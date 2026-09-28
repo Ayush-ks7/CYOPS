@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #080c14;
+    --bg-card: #0f1726;
+    --border-color: #1a2742;
+    --accent-cyan: #00f0ff;
+    --accent-amber: #f97316;
+  }
+
+  body {
+    background-color: #080c14;
+    color: #e2e8f0;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  /* Scientific custom dark scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #090e18;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1e2c47;
+    border-radius: 3px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #2b3e64;
+  }
+}
+
+/* Custom Radar / Mission Control Utilities */
+.radar-grid {
+  background-size: 30px 30px;
+  background-image: 
+    linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+}
+
+.radar-sweep {
+  background: conic-gradient(from 0deg at 50% 50%, rgba(0, 240, 255, 0) 0deg, rgba(0, 240, 255, 0.15) 60deg, transparent 60.1deg);
+  animation: radar-spin 4s linear infinite;
+}
+
+@keyframes radar-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.2;
+  }
+  100% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+.pulse-animation {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Leaflet Dark Nautical Map Overrides */
+.leaflet-container {
+  background-color: #080c14 !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.leaflet-control-zoom a {
+  background-color: #0f1726 !important;
+  color: #00f0ff !important;
+  border: 1px solid #1a2742 !important;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: #1a2742 !important;
+  color: #ffffff !important;
+}
+
+.leaflet-control-attribution {
+  background-color: rgba(8, 12, 20, 0.85) !important;
+  color: #64748b !important;
+  font-size: 10px !important;
+  border-top-left-radius: 4px;
+}
+
+.leaflet-control-attribution a {
+  color: #0284c7 !important;
+}
+
+/* Monospace Telemetry */
+.font-telemetry {
+  font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+  letter-spacing: -0.02em;
+}
+
+/* Glassmorphism restrained */
+.ops-glass {
+  background: rgba(15, 23, 38, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid #1a2742;
+}
+
+.ops-card-glow {
+  box-shadow: 0 0 15px -3px rgba(0, 240, 255, 0.12);
+}
+
+.ops-warning-glow {
+  box-shadow: 0 0 20px -3px rgba(249, 115, 22, 0.25);
+}
